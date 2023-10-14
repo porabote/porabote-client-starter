@@ -1,0 +1,6 @@
+const configs = {
+  domain: "localhost",
+  port_dev: 5000,
+}
+
+module.exports = configs;
