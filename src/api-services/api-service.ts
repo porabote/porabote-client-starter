@@ -1,32 +1,44 @@
-import { API_URL, API_VERSION } from "./constants";
+import {API_URL, API_VERSION} from "./constants";
 
-class Api {
+type GetProps = {
+  query?: { [key: string]: string | number }
+  url?: string
+}
 
-  get = async (uri, params = {}) => {
+interface IApi {
+  get: (url?: string) => {}
+}
+
+const Api = (): void => {
+
+  const get = async (uri: string, params: GetProps) => {
     let queryUri = uri;
 
-    const url = (typeof params.url !== "undefined") ? params.url : API_URL;
+    const url = typeof params.url !== "undefined" ? params.url : API_URL;
 
     if (typeof params.query !== "undefined") {
-      const query = this.objectToQuerystring(params.query);
+      const query = objectToQuerystring(params.query, null);
       queryUri = `${queryUri}?${query}`;
     }
 
-    const response = await fetch(`${url}${queryUri}`, {
+    const init: RequestInit = {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
       credentials: "omit",
       headers: {
-        "Access-Control-Allow-Credentials": false,
-        Authorization: `bearer ${this.getToken()}`,
-        Accept: "application/json, text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8",
-        "Content-Type": "application/json, text/html;charset=UTF-8",
-        "Api-Version": 2,
+        "Access-Control-Allow-Credentials": "omit",
+        Authorization: `bearer ${getToken()}`,
+        Accept:
+          "application/json, text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8",
+          "Content-Type": "application/json, text/html;charset=UTF-8",
+          "Api-Version": "2",
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
-    });
+    }
+
+    let response: Response = await fetch(`${url}${queryUri}`, init);
 
     const data = await response.json();
 
@@ -37,21 +49,21 @@ class Api {
       return Promise.reject(error);
     }
 
-    return { ...data, ...{ response: { status: response.status } } };
-  }
+    return {...data, ...{response: {status: response.status}}};
+  };
 
-  post = async (uri, params) => {
-    const url = (typeof params.url !== "undefined") ? params.url : API_URL;
+  const post = async (uri, params) => {
+    const url = typeof params.url !== "undefined" ? params.url : API_URL;
 
     const headersDefault = {
-      "Access-Control-Allow-Credentials": false,
-      Authorization: `bearer ${this.getToken()}`,
+      "Access-Control-Allow-Credentials": "omit",
+      Authorization: `bearer ${getToken()}`,
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8",
       "Api-Version": API_VERSION,
     };
 
-    let body = { ...params.body };
+    let body = {...params.body};
 
     // Excluding Content type for correctly binding of data
     if (params.body instanceof FormData) {
@@ -75,30 +87,32 @@ class Api {
     });
 
     const responseJSON = await response.json();
-    return { ...responseJSON, ...{ response: { status: response.status } } };
-  }
+    return {...responseJSON, ...{response: {status: response.status}}};
+  };
 
   /**
    * Parsing Object to URI
    */
-  objectToQuerystring = (obj, prefix) => {
+  const objectToQuerystring = (obj: { [key: string]: string | number }, prefix): string => {
     const str = [];
     Object.keys(obj).map((key) => {
       const k = prefix ? `${prefix}[${key}]` : key;
       const v = obj[key] ? obj[key] : "";
-      str.push((v !== null && typeof v === "object")
-        ? this.objectToQuerystring(v, k)
-        : `${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+      str.push(
+        v !== null && typeof v === "object"
+          ? objectToQuerystring(v, k)
+          : `${encodeURIComponent(k)}=${encodeURIComponent(v)}`,
+      );
       return k;
     });
 
     return str.join("&");
-  }
+  };
 
   /**
    * Parsing URI to Object
    */
-  queryStringToObject = (uri) => {
+  const queryStringToObject = (uri) => {
     let uriArray = uri.replace(/^\?*/, "");
     if (uriArray.length === 0) return {};
 
@@ -107,20 +121,19 @@ class Api {
     const uriObj = {};
     for (let i = 0; i < uriArray.length; i += 1) {
       const chainArray = uriArray[i].split("=");
-      uriObj[chainArray[0]] = { ...chainArray[1] };
+      uriObj[chainArray[0]] = {...chainArray[1]};
     }
 
     return uriObj;
-  }
+  };
 
-  getToken = () => {
+  const getToken = () => {
     let accessToken = localStorage.getItem("access_token");
     if (typeof accessToken === "object") {
       accessToken = "";
     }
     return accessToken;
-  }
-
+  };
 }
 
-export default new Api();
+export default Api;

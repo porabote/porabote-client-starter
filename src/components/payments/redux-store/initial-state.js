@@ -26,13 +26,13 @@ const initialState = {
       bill_number: {
         operand: "like",
         pattern: "%T%",
-        value: ""
+        value: "",
       },
     },
     whereBetween: {
       date_payment: {
         //value: [subtractMonths(new Date(), 1), subtractMonths(new Date(), -1)],
-        period: {from: null, to: null}
+        period: { from: null, to: null },
       },
     },
     // orWhereGrouped: [

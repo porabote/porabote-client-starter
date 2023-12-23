@@ -1,7 +1,7 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
 import "./navbar.less";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+//import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 type navbarProps = {
   data: {key: number};
@@ -60,7 +60,8 @@ const Navbar = (props: navbarProps) => {
                 >
                   {item.name}
                   {item.children &&
-                    <KeyboardArrowDownIcon style={{fontSize: "16px"}}/>
+                    <span>arr</span>
+                    // <KeyboardArrowDownIcon style={{fontSize: "16px"}}/>
                   }
                 </a>
                 {setChildren(item.children)}
@@ -76,7 +77,8 @@ const Navbar = (props: navbarProps) => {
                 >
                   {item.name}
                   {item.children &&
-                    <KeyboardArrowDownIcon style={{fontSize: "16px"}}/>
+                    <span>arr</span>
+                    // <KeyboardArrowDownIcon style={{fontSize: "16px"}}/>
                   }
                 </NavLink>
                 {setChildren(item.children)}

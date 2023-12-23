@@ -3,7 +3,7 @@ const configs = require('./configs');
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ESLintPlugin = require("eslint-webpack-plugin");
 
@@ -15,7 +15,7 @@ module.exports = (webpackEnv) => {
     mode: isEnvProduction ? "production" : isEnvDevelopment && "development",
     bail: isEnvProduction,
     context: path.join(__dirname, "../"),
-    stats: "errors-only",
+    stats: "errors-warnings",
     entry: {
       main: "./src/index.js",
     },
@@ -50,7 +50,7 @@ module.exports = (webpackEnv) => {
           test: /\.(js|mjs|jsx|ts|tsx)$/,
           exclude: /(node_modules\/[^porabote]|bower_components)/,
           include: [
-           // path.resolve(__dirname, "../node_modules/porabote"),
+            // path.resolve(__dirname, "../node_modules/porabote"),
             path.resolve(__dirname, "../src"),
           ],
           use: {
@@ -72,12 +72,6 @@ module.exports = (webpackEnv) => {
         {
           test: /\.(less|css)$/,
           use: [
-            // {
-            //   loader: MiniCssExtractPlugin.loader,
-            //   options: {
-            //     publicPath: path.join(__dirname, "dist"),
-            //   },
-            // },
             {
               loader: "style-loader", // creates style nodes from JS strings
             }, {
@@ -113,43 +107,46 @@ module.exports = (webpackEnv) => {
       new MiniCssExtractPlugin({
         filename: "[name].[fullhash].bundle.css",
       }),
-      new CleanWebpackPlugin({
-      }),
+      new CleanWebpackPlugin({}),
       new ESLintPlugin({
         exclude: ["node_modules"],
       }),
     ],
-    // optimization: {
-    //   minimize: false,
-    // },
     devServer: {
-      stats: "errors-only",
+      client: {
+        overlay: false,
+      },
       historyApiFallback: true,
-      contentBase: path.resolve(__dirname, "../dist"),
+      static: path.resolve(__dirname, "../dist"),
       open: true,
       compress: true,
       hot: isEnvDevelopment,
       allowedHosts: [
         configs.domain,
       ],
-      https: true,
       host: configs.domain,
-      cert: configs.certPath,
-      key: configs.certKey,
-      writeToDisk: false,
+     // server: 'https',
+      server: {
+        // 'https': {
+        //   cert: configs.certPath,
+        //   key: configs.certKey,
+        // }
+      },
+      // cert: configs.certPath,
+      // key: configs.certKey,
+      // writeToDisk: false,
       onListening: (server) => {
-        const { port } = server.listeningApp.address();
+        const {port} = server.server.address();
         console.log("Listening on port:", port);
-      },
-      before: (app, server, compiler) => {
-        console.log("Webpack Server is starting...");
-      },
-      clientLogLevel: "debug",
-      after: (app, server, compiler) => {
       },
       proxy: {
         "/userfiles/files": `https://${configs.domain}`,
       },
+      // headers: {
+      //   'Access-Control-Allow-Origin': '*',
+      //   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+      //   'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
+      // },
     },
   };
 };

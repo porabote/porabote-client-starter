@@ -1,28 +1,33 @@
 import {
   AUTH_CHECK,
   AUTH_CHECK_SUCCESS,
-  LOGIN,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGIN_FAILURE,
+  //LOGIN_FAILURE,
   LOGOUT,
-} from './auth-types';
+} from "./auth-types";
 
-const authCheck = () => {
-  return { type: AUTH_CHECK }
-}
+const authCheck = () => ({ type: AUTH_CHECK });
 
-const authCheckSuccess = (access_token) => {
-  return { type: AUTH_CHECK_SUCCESS, payload: {access_token} }
-}
+const authCheckSuccess = (access_token) => ({
+  type: AUTH_CHECK_SUCCESS,
+  payload: { access_token },
+});
 
-const loginRequest = () => {
-  return { type: LOGIN_REQUEST }
-}
+const loginRequest = () => ({ type: LOGIN_REQUEST });
 
-const loginSuccess = (user, access_token) => {
-  return { type: LOGIN_SUCCESS, payload: {user, access_token} }
-}
+const loginSuccess = (user, access_token) => ({
+  type: LOGIN_SUCCESS,
+  payload: {
+    user,
+    access_token,
+  },
+});
+
+const logout = () => (dispatch) => {
+  localStorage.removeItem("access_token");
+  dispatch({ type: LOGOUT });
+};
 
 // const checkAuth = () => {
 //
@@ -37,14 +42,6 @@ const loginSuccess = (user, access_token) => {
 //
 //   function loginFailure() { return { type: LOGIN_FAILURE } }
 // }
-
-const logout = () => {
-    return dispatch => {
-        localStorage.removeItem('access_token')
-        dispatch({ type: LOGOUT })
-    }
-}
-
 
 // const refreshToken = () => {
 //     let currUser = JSON.parse(localStorage.getItem("userData"));
@@ -67,12 +64,11 @@ const logout = () => {
 //     });
 // };
 
-
 export {
   authCheck,
   authCheckSuccess,
   loginRequest,
   loginSuccess,
-	logout,
-	//refreshToken
-	}
+  logout,
+  //refreshToken
+};

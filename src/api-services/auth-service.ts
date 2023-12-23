@@ -2,7 +2,7 @@ import { API_URL } from "./constants";
 
 class AuthService {
   post = async (uri, params) => {
-    const url = (typeof params.url !== "undefined") ? params.url : API_URL;
+    const url = typeof params.url !== "undefined" ? params.url : API_URL;
     const response = await fetch(`${url}${uri}`, {
       method: "POST",
       mode: "cors",
@@ -21,12 +21,12 @@ class AuthService {
     });
     const responseJSON = await response.json();
     return { ...responseJSON, ...{ response: { status: response.status } } };
-  }
+  };
 
   getToken = () => {
     const accessToken = localStorage.getItem("access_token");
     return accessToken;
-  }
+  };
 }
 
 export default new AuthService();

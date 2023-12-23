@@ -1,15 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {Field, Button} from "@/app/form";
-import PreviewSendPayments from "./dialogs/preview-send-payments";
+import React, { useState, useEffect } from "react";
 import modal from "@app/modal";
-import notifacations from "@/app/notifications";
-import Payments from "../models/Payments";
 import ExportHandlerBuilder from "@app/export-handler";
-import RequestForCancel from "./dialogs/request-for-cancel";
+import Payments from "../models/Payments";
 import AccessLists from "../../access-lists/models/AccessLists";
+import RequestForCancel from "./dialogs/request-for-cancel";
+import PreviewSendPayments from "./dialogs/preview-send-payments";
+import notifacations from "@/app/notifications";
+import { Field, Button } from "@/app/form";
 
-const TopPanel = props => {
-
+const TopPanel = (props) => {
   const [isCanAccept, setIsCanAccept] = useState(false);
   const [isAllowCancelRequest, setIsAllowCancelRequest] = useState(false);
   const [contractors, setContractors] = useState(new Set());
@@ -19,60 +18,59 @@ const TopPanel = props => {
   }, []);
 
   const checkButtonAccess = async () => {
-    let res = await new Payments().post('checkButtonAccess');
+    const res = await new Payments().post("checkButtonAccess");
     setIsCanAccept(res.data.isCanAccept);
 
-    let allowCancelRequestCheck = await AccessLists.check(15);
+    const allowCancelRequestCheck = await AccessLists.check(15);
     setIsAllowCancelRequest(allowCancelRequestCheck);
 
-    let contractors = new Set();
-    res.data.contractors.forEach(contractor => {
+    const contractors = new Set();
+    res.data.contractors.forEach((contractor) => {
       contractors.add(contractor.id);
     });
     setContractors(contractors);
-  }
+  };
 
   const exportScans = async (props) => {
-
-    let ids = props.formContext.entity.attributes.index_records_ids;
-    let idsSet = new Set();
+    const ids = props.formContext.entity.attributes.index_records_ids;
+    const idsSet = new Set();
 
     if (!ids || ids.length == 0) {
       notifacations.push(<p>Пожалуйста, выберите платежи.</p>);
       return;
-    } else {
-      for (const id in ids) {
-        if (ids[id]) {
-          idsSet.add(id);
-        }
+    }
+    for (const id in ids) {
+      if (ids[id]) {
+        idsSet.add(id);
       }
     }
 
     props.setIsButtonLoading(true);
-    let exportHandler = await new ExportHandlerBuilder()
+    const exportHandler = await new ExportHandlerBuilder()
       .setUri("/api/payments/method/downloadScans/")
       .setData({
         ids: Array.from(idsSet),
       })
       .download();
     props.setIsButtonLoading(false);
-  }
+  };
 
   return (
     <React.Fragment>
       <div className="buttons-panel">
-
         <Field>
           <Button
             isVisible={(props) => {
-              let statusId = props.formContext.entity.getAttribute('where.status_id');
-              let clientId = props.formContext.entity.getAttribute("where.client_id");
+              const statusId =
+                props.formContext.entity.getAttribute("where.status_id");
+              const clientId =
+                props.formContext.entity.getAttribute("where.client_id");
 
-              return (statusId == 42 && contractors.has(clientId)) ? true : false;
+              return statusId == 42 && contractors.has(clientId) ? true : false;
             }}
             label="Просмотр и отправка"
             onClick={(props) => {
-              let ids = props.formContext.entity.attributes.index_records_ids;
+              const ids = props.formContext.entity.attributes.index_records_ids;
 
               if (!ids || ids.length == 0) {
                 notifacations.push(<p>Пожалуйста, выберите платежи.</p>);
@@ -95,16 +93,17 @@ const TopPanel = props => {
           <Button
             label="Просмотреть выбранное"
             onClick={(props) => {
-              let ids = props.formContext.entity.attributes.index_records_ids;
+              const ids = props.formContext.entity.attributes.index_records_ids;
 
               if (!ids || ids.length == 0) {
                 notifacations.push(<p>Пожалуйста, выберите платежи.</p>);
                 return;
               }
 
-              let clientId = props.formContext.entity.getAttribute("where.client_id");
+              const clientId =
+                props.formContext.entity.getAttribute("where.client_id");
 
-              const viewOnly = (contractors.has(clientId)) ? false : true;
+              const viewOnly = contractors.has(clientId) ? false : true;
 
               modal.open(
                 <PreviewSendPayments
@@ -119,10 +118,7 @@ const TopPanel = props => {
         </Field>
 
         <Field>
-          <Button
-            label="Скачать скан-копии"
-            onClick={exportScans}
-          />
+          <Button label="Скачать скан-копии" onClick={exportScans} />
         </Field>
 
         {/* <Field> */}
@@ -143,7 +139,6 @@ const TopPanel = props => {
         {/*     }} */}
         {/*   /> */}
         {/* </Field> */}
-
       </div>
 
       {/* <div> */}
@@ -151,9 +146,8 @@ const TopPanel = props => {
       {/*       Добавить */}
       {/*   </span> */}
       {/* </div> */}
-
     </React.Fragment>
   );
-}
+};
 
 export default TopPanel;

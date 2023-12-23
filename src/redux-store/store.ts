@@ -32,10 +32,8 @@ export let registrationSaga: (key: string, asyncSaga: any) => void = (key, async
     asyncSagasReg[key] = key;
   }
 }
-
-// Infer the `RootState` and `AppDispatch` types from the redux-store itself
+console.log(99999, typeof store.getState);
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

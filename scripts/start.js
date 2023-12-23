@@ -1,21 +1,20 @@
-'use strict';
+"use strict";
+
+const Webpack = require("webpack");
+const path = require('path');
+const http = require('http');
+const WebpackDevServer = require('webpack-dev-server');
 const configs = require('../configs/configs');
 
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
-
-const path = require('path');
-const http = require('http');
-
-const webpack = require('webpack');
-const webpackDevServer = require('webpack-dev-server');
 
 const configFactory = require('../configs/webpack.config.js');
 
 const start = () => {
 
   const webpackConfig = configFactory('development');
-  const compiler = webpack(webpackConfig);
+  const compiler = Webpack(webpackConfig);
 
   return new Promise((resolve, reject) => {
 
@@ -24,25 +23,27 @@ const start = () => {
 
     const devServerOptions = Object.assign({}, webpackConfig.devServer, {
       open: true,
+      host: HOST,
+      port: PORT,
     });
 
-    webpackDevServer.addDevServerEntrypoints(configFactory, devServerOptions);
+    //WebpackDevServer.addDevServerEntrypoints(configFactory, devServerOptions);
 
-    const devServer = new webpackDevServer(compiler, devServerOptions)
+    const devServer = new WebpackDevServer(devServerOptions, compiler)
 
-    devServer.listen(PORT, HOST, err => {
-      console.log(`Dev server listening on port ${HOST}`);
-      if (err) {
-         console.log(err);
-      }
+    // devServer.start(PORT, HOST, (err) => {
+    // });
+
+    devServer.startCallback(() => {
+      console.log(`Dev server listening on port ${HOST}:${PORT}`);
     });
 
     return resolve('Compiled successfully.');
 
   }).catch(err => {
     console.log(err);
-  })
-}
+  });
+};
 
 let startPromise = start();
 

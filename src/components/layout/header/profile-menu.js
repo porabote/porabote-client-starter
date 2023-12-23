@@ -8,8 +8,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import GroupIcon from "@material-ui/icons/Group";
 
 const ProfileMenu = (props) => {
-
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const logout = () => {
     localStorage.removeItem("access_token");
@@ -20,71 +19,105 @@ const ProfileMenu = (props) => {
   const settingStyle = {
     color: "#444",
     marginRight: "12px",
-    fontSize: "18px"
+    fontSize: "18px",
   };
 
   return (
     <div
-      className={props.isMenuOpen ? "header-panel__profile__dropdown open" : "header-panel__profile__dropdown"}>
-
+      className={
+        props.isMenuOpen
+          ? "header-panel__profile__dropdown open"
+          : "header-panel__profile__dropdown"
+      }
+    >
       <div className="header-panel__profile__dropdown__item">
-        <PersonIcon style={settingStyle}/>
-        <NavLink to={`/users/view/${user.id}`}
-                 className="header-panel__profile__dropdown__item__divnk profil"> Профиль</NavLink>
+        <PersonIcon style={settingStyle} />
+        <NavLink
+          to={`/users/view/${user.id}`}
+          className="header-panel__profile__dropdown__item__divnk profil"
+        >
+          {" "}
+          Профиль
+        </NavLink>
       </div>
 
       <React.Fragment>
-        {props.perms.isCanViewBusinessEvents &&
+        {props.perms.isCanViewBusinessEvents && (
           <>
             <div className="header-panel__profile__dropdown__item">
-              <SettingsEthernetIcon style={settingStyle}/>
-              <NavLink to="/business-events/feed/"
-                       className="header-panel__profile__dropdown__item__divnk profil">Бизнес-события</NavLink>
+              <SettingsEthernetIcon style={settingStyle} />
+              <NavLink
+                to="/business-events/feed/"
+                className="header-panel__profile__dropdown__item__divnk profil"
+              >
+                Бизнес-события
+              </NavLink>
             </div>
 
             <div className="header-panel__profile__dropdown__item">
-              <SettingsEthernetIcon style={settingStyle}/>
-              <NavLink to="/access-lists/feed/"
-                       className="header-panel__profile__dropdown__item__divnk profil">Списки доступа</NavLink>
+              <SettingsEthernetIcon style={settingStyle} />
+              <NavLink
+                to="/access-lists/feed/"
+                className="header-panel__profile__dropdown__item__divnk profil"
+              >
+                Списки доступа
+              </NavLink>
             </div>
 
             <div className="header-panel__profile__dropdown__item">
-              <SettingsEthernetIcon style={settingStyle}/>
-              <NavLink to="/mails-patterns/feed/ "
-                       className="header-panel__profile__dropdown__item__divnk profil">Шаблоны писем</NavLink>
+              <SettingsEthernetIcon style={settingStyle} />
+              <NavLink
+                to="/mails-patterns/feed/ "
+                className="header-panel__profile__dropdown__item__divnk profil"
+              >
+                Шаблоны писем
+              </NavLink>
             </div>
           </>
-        }
-        {props.perms.isCanViewConfigs &&
-
+        )}
+        {props.perms.isCanViewConfigs && (
           <div className="header-panel__profile__dropdown__item">
-            <SettingsIcon style={settingStyle}/>
-            <a href="/configs/"
-               className="header-panel__profile__dropdown__item__divnk profil"> Конфигурация</a>
+            <SettingsIcon style={settingStyle} />
+            <a
+              href="/configs/"
+              className="header-panel__profile__dropdown__item__divnk profil"
+            >
+              {" "}
+              Конфигурация
+            </a>
           </div>
-        }
+        )}
 
-        {props.perms.isCanViewUsers &&
+        {props.perms.isCanViewUsers && (
           <div className="header-panel__profile__dropdown__item">
-            <GroupIcon style={settingStyle}/>
-            <a href="/porabote/users/feed/"
-               className="header-panel__profile__dropdown__item__divnk profil"> Пользователи</a>
+            <GroupIcon style={settingStyle} />
+            <a
+              href="/porabote/users/feed/"
+              className="header-panel__profile__dropdown__item__divnk profil"
+            >
+              {" "}
+              Пользователи
+            </a>
           </div>
-        }
+        )}
       </React.Fragment>
-
 
       <div className="header-panel__profile__dropdown__separator"></div>
       <div className="header-panel__profile__dropdown__item ">
-        <ExitToAppIcon style={{
-          color: "#444",
-          marginRight: "12px",
-          fontSize: "18px"
-        }}/>
-        <span onClick={logout}
-              className="header-panel__profile__dropdown__item__divnk exit">Выход</span>
+        <ExitToAppIcon
+          style={{
+            color: "#444",
+            marginRight: "12px",
+            fontSize: "18px",
+          }}
+        />
+        <span
+          onClick={logout}
+          className="header-panel__profile__dropdown__item__divnk exit"
+        >
+          Выход
+        </span>
       </div>
-
     </div>
   );
 };

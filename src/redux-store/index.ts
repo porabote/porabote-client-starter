@@ -1,9 +1,10 @@
 import Store, {RootState, AppDispatch, registrationReducer, registrationSaga} from "./store";
 
 export {
-  RootState,
-  AppDispatch,
+  type RootState,
+  type AppDispatch,
   registrationReducer,
   registrationSaga,
 };
+
 export default Store;

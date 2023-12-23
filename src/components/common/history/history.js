@@ -4,7 +4,6 @@ import moment from "moment";
 import HistoryModel from "./models/History";
 
 const History = (props) => {
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -12,9 +11,7 @@ const History = (props) => {
   }, []);
 
   const fetchData = async () => {
-    let data = await new HistoryModel()
-      .setWhere(props.where)
-      .get();
+    const data = await new HistoryModel().setWhere(props.where).get();
     setData(data.data);
   };
 
@@ -22,23 +19,21 @@ const History = (props) => {
 
   return (
     <div className="comments">
-      <div className="comments__title sidebar-box-up"><span>История ({count})</span></div>
-      {
-        data.map((item, index) => {
-          return (
-            <HistoryItem
-              key={index}
-              msg={item.attributes.msg}
-              user={item.attributes.user_name}
-              datetime={moment(item.attributes.created_at || item.attributes.date_created)
-                .format("DD MMM YYYY HH:mm")}
-            />
-          );
-        })
-      }
+      <div className="comments__title sidebar-box-up">
+        <span>История ({count})</span>
+      </div>
+      {data.map((item, index) => (
+        <HistoryItem
+          key={index}
+          msg={item.attributes.msg}
+          user={item.attributes.user_name}
+          datetime={moment(
+            item.attributes.created_at || item.attributes.date_created,
+          ).format("DD MMM YYYY HH:mm")}
+        />
+      ))}
     </div>
   );
-
 };
 
 export default History;

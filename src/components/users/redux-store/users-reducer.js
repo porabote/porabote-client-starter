@@ -20,36 +20,30 @@ const initialState = {
   },
   filter: {
     where: {
-      department_id: '',
-      status: '',
-      account_id: '',
+      department_id: "",
+      status: "",
+      account_id: "",
     },
     orWhereGrouped: [
       {
         name: {
           operand: "like",
           pattern: "%T%",
-          value: ""
+          value: "",
         },
         post_name: {
           operand: "like",
           pattern: "%T%",
-          value: ""
+          value: "",
         },
-      }
+      },
     ],
     whereIn: {
       department_id: [],
     },
     seekString: "",
   },
-  dictsRequired: [
-    "api_users",
-    "departments",
-    "accounts",
-    "shifts",
-    "cities",
-  ],
+  dictsRequired: ["api_users", "departments", "accounts", "shifts", "cities"],
   relationships: [
     "avatar",
     "department.account",
@@ -73,10 +67,7 @@ const usersReducer = (state = initialState, { type, payload } = {}) => {
     case "FETCH_FEED_USERS_DATA_SUCCEEDED":
       return {
         ...state,
-        data: [
-          ...state.data,
-          ...payload.data,
-        ],
+        data: [...state.data, ...payload.data],
         meta: {
           ...state.meta,
           ...payload.meta,

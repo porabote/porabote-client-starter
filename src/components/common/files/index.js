@@ -1,8 +1,6 @@
 import File from "./models/file";
-import FilesViewer from './files-viewer';
+import FilesViewer from "./files-viewer";
 
-export {
-  FilesViewer
-};
+export { FilesViewer };
 
 export default File;

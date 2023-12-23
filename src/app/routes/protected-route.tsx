@@ -1,8 +1,8 @@
 import React, {FC} from "react";
 import {useSelector} from "react-redux";
-import {Redirect, Route} from "react-router-dom";
+import {redirect, Route} from "react-router-dom";
 import {LOGIN_ACTION} from "@app/auth/constants";
-export {IMatch} from "@app/types/ts-react-types";
+export type { IMatch } from "@app/types/ts-react-types";
 
 type ProtectedRouteType = {
   Component: FC;
@@ -36,12 +36,7 @@ const ProtectedRoute = (props: ProtectedRouteType) => {
         if (isAuth || isMethodAllowed) {
           return <Component {...props} />;
         } else {
-          return <Redirect to={{
-            pathname: LOGIN_ACTION,
-            state: {
-              reference: props.location
-            }
-          }}/>
+          return redirect(LOGIN_ACTION, props.location);
         }
       }
       }/>

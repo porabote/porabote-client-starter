@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Field,
@@ -7,23 +7,22 @@ import {
   Button,
   SubmitButton,
   Textarea,
-} from 'porabote/form';
+} from "porabote/form";
 import File from "../models/file";
 
 const EditForm = (props) => {
-
   const [record, setRecord] = useState(null);
 
   useEffect(() => {
     getFile();
   }, []);
 
-  const getFile = async function() {
-    let record = await File.get(props.id);
+  const getFile = async function () {
+    const record = await File.get(props.id);
     setRecord(record);
-  }
+  };
 
-  if (!record) return '<p>Загружаю данные</p>';
+  if (!record) return "<p>Загружаю данные</p>";
 
   return (
     <div>
@@ -35,7 +34,7 @@ const EditForm = (props) => {
         }}
       >
         <Field>
-          <Textarea label="Комментарий" name="dscr"/>
+          <Textarea label="Комментарий" name="dscr" />
         </Field>
 
         <SubmitButton>
@@ -43,12 +42,12 @@ const EditForm = (props) => {
             text="Сохранить"
             className="on-button grey-stroke_x_yellow-fill icon-login-auth__grey_x_white"
             type="button"
-            style={{width: '140px', marginTop: '20px'}}
+            style={{ width: "140px", marginTop: "20px" }}
           />
         </SubmitButton>
       </Form>
     </div>
-  )
-}
+  );
+};
 
 export default EditForm;

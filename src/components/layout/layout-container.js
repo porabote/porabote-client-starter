@@ -1,11 +1,6 @@
 import React from "react";
 import DefaultLayout from "./default-layout";
 
-const LayoutContainer = (props) => {
-
-  return(
-    <DefaultLayout/>
-  );
-}
+const LayoutContainer = () => <DefaultLayout />;
 
 export default LayoutContainer;

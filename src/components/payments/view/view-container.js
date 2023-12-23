@@ -1,20 +1,24 @@
-import React, {useEffect, useState} from "react";
-import {useSelector, useDispatch} from "react-redux";
-import {pushItemToModal, removeModalItem} from "porabote/modal/store/modal-actions";
-import { useHistory } from 'react-router';
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  pushItemToModal,
+  removeModalItem,
+} from "porabote/modal/store/modal-actions";
+import { useHistory } from "react-router";
 import Api from "@services";
-import View from "./view";
 import ViewPreloader from "@components/view/view-preloader";
+import View from "./view";
 
 const ViewContainer = (props) => {
-
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
-  const { dictsRequired, title, meta, filter } = useSelector(state => state.payments);
-  const { components, dicts } = useSelector(state => state.dicts);
+  const { dictsRequired, title, meta, filter } = useSelector(
+    (state) => state.payments,
+  );
+  const { components, dicts } = useSelector((state) => state.dicts);
 
   const isDictsLoaded = components.payments ? true : false;
 
@@ -27,28 +31,34 @@ const ViewContainer = (props) => {
     getRecord();
   }, [props.id]);
 
-  const {relationships} = useSelector(state => state.payments);
+  const { relationships } = useSelector((state) => state.payments);
 
   const getRecord = () => {
-
-    const {id} = props;
+    const { id } = props;
 
     Api.get(`/api/payments/get/${id}/`, {
       query: {
-        include: relationships
-      }
+        include: relationships,
+      },
     }).then((resp) => {
       setData(resp.data);
       setLoaded(true);
     });
-  }
+  };
 
   const editRecord = (getRecord) => {
-    dispatch(pushItemToModal(
-      React.createElement(EditRecordForm, { data, editRecordConfirm, dicts, getRecord }),
-      `Редактировать данные`
-    ));
-  }
+    dispatch(
+      pushItemToModal(
+        React.createElement(EditRecordForm, {
+          data,
+          editRecordConfirm,
+          dicts,
+          getRecord,
+        }),
+        `Редактировать данные`,
+      ),
+    );
+  };
 
   const deleteRecord = (id, fetchFeedData) => {
     // Api.get(`/api/mails-patterns/method/delete/?id=${id}`)
@@ -56,7 +66,7 @@ const ViewContainer = (props) => {
     //     fetchFeedData();
     //     history.push('/mails-patterns/feed/');
     // });
-  }
+  };
 
   const editRecordConfirm = (values, modalKey, getRecord) => {
     // Api.post(`/api/mails-patterns/method/edit/`, {
@@ -68,11 +78,10 @@ const ViewContainer = (props) => {
     //   getRecord();
     //   dispatch(removeModalItem(modalKey));
     // });
-  }
-
+  };
 
   if (!loaded) {
-    return <ViewPreloader/>;
+    return <ViewPreloader />;
   }
 
   return (
@@ -86,7 +95,6 @@ const ViewContainer = (props) => {
       fetchFeedData={props.fetchFeedData}
     />
   );
-
-}
+};
 
 export default ViewContainer;

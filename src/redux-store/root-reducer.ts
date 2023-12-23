@@ -5,7 +5,7 @@ const staticReducers = {
   auth: authReducer,
 };
 
-function createReducer(asyncReducers) {
+function createReducer(asyncReducers: {}) {
   return combineReducers({
     ...staticReducers,
     ...asyncReducers,

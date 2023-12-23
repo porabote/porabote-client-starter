@@ -5,11 +5,4 @@ const AUTH_URL = "https://auth.todo.porabote.ru";
 const CHAT_DOMAIN = "wss://todo.porabote.ru";
 const CHAT_PORT = "4000";
 
-export {
-  DOMAIN_BASE,
-  API_URL,
-  AUTH_URL,
-  FILES_URL,
-  CHAT_DOMAIN,
-  CHAT_PORT,
-}
+export { DOMAIN_BASE, API_URL, AUTH_URL, FILES_URL, CHAT_DOMAIN, CHAT_PORT };

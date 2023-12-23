@@ -1,19 +1,18 @@
-import {call, put, select, takeEvery} from "redux-saga/effects";
-import {fetchFeedDataSuccess, fetchFeedDataError} from "./users-actions"
-import Api from '@services/api-service'
+import { call, put, select, takeEvery } from "redux-saga/effects";
+import Api from "@services/api-service";
+import { fetchFeedDataSuccess, fetchFeedDataError } from "./users-actions";
 
-function* usersWatcher() {//console.log(select(spares))
+function* usersWatcher() {
+  //console.log(select(spares))
   yield takeEvery("FETCH_FEED_USERS_DATA", fetchFeedDataAsync);
 }
 
 function* fetchFeedDataAsync() {
-
   const state = yield select();
 
   try {
     const data = yield call(() => {
-
-      let where = {...state.users.filter.where};
+      const where = { ...state.users.filter.where };
       delete where.account_id;
 
       return Api.get(`/api/api-users/get/`, {
@@ -25,9 +24,9 @@ function* fetchFeedDataAsync() {
           page: state.users.meta.nextPage,
           limit: state.users.meta.limit,
           orderBy: {
-            name: 'ASC'
-          }
-        }
+            name: "ASC",
+          },
+        },
       }).then((res) => res);
     });
     yield put(fetchFeedDataSuccess(data));

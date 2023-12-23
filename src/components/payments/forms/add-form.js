@@ -1,22 +1,31 @@
 import React, { useState } from "react";
 import moment from "moment";
+import {
+  Form,
+  Field,
+  Select,
+  Input,
+  InputDate,
+  TextArea,
+  Button,
+} from "@app/form";
+import notice from "@app/notifications";
 import Payments from "../models/Payments";
-import { Form, Field, Select, Input, InputDate, TextArea, Button } from "@app/form";
 import { ModelDataSource } from "@/app/DataSources";
 import Dict from "@/components/dicts/models/Dicts";
-import notice from "@app/notifications";
 
-const AddForm = props => {
-
+const AddForm = (props) => {
   const [record] = useState(props.data);
   const [bill] = useState(props.data.relationships.bill.attributes);
   const [summa, setSumma] = useState(record.attributes.summa);
   const [ndsSumma, setNdsSumma] = useState(record.attributes.nds_summa);
   const [ndsPercent, setNdsPercent] = useState(record.attributes.nds_percent);
   const [purpose, setPurpose] = useState(record.attributes.purpose);
-  const [purposeLength, setPurposeLength] = useState(record.attributes.purpose ? record.attributes.purpose.length : 0);
+  const [purposeLength, setPurposeLength] = useState(
+    record.attributes.purpose ? record.attributes.purpose.length : 0,
+  );
 
-  let purposeStyle = {
+  const purposeStyle = {
     fontSize: "12px",
     margin: "10px 0",
     padding: "10px",
@@ -26,30 +35,28 @@ const AddForm = props => {
 
   const submit = async (entity) => {
     await entity.save();
-    notice.push(<>Данные успешно сохранены</>, {type: "OK"});
+    notice.push(<>Данные успешно сохранены</>, { type: "OK" });
   };
 
   const changeSummaHandle = (newValue) => {
-    let newNdsSumma = summa * ndsPercent / (100 + parseFloat(ndsPercent));
+    const newNdsSumma = (summa * ndsPercent) / (100 + parseFloat(ndsPercent));
     setNdsSumma(newNdsSumma.toFixed(2));
   };
-  const changeNdsHandle = (newValue) => {
-
-  };
-  const changeNdsSummaHandle = (newValue) => {
-
-  };
+  const changeNdsHandle = (newValue) => {};
+  const changeNdsSummaHandle = (newValue) => {};
 
   const recalc = (summa, ndsSumma, ndsPercent) => {
-    let newNdsSumma = summa * ndsPercent / (100 + parseFloat(ndsPercent));
+    const newNdsSumma = (summa * ndsPercent) / (100 + parseFloat(ndsPercent));
     setNdsSumma(newNdsSumma.toFixed(2));
   };
 
   return (
-    <div style={{
-      maxWidth: "650px",
-      margin: "0 auto"
-    }}>
+    <div
+      style={{
+        maxWidth: "650px",
+        margin: "0 auto",
+      }}
+    >
       <Form
         model={Payments}
         initValues={{
@@ -57,7 +64,6 @@ const AddForm = props => {
         }}
         onSubmit={submit}
       >
-
         <div className="fieldset__title">Данные</div>
 
         <div className="fieldset" style={{ gridTemplateColumns: "1fr" }}>
@@ -79,15 +85,15 @@ const AddForm = props => {
               name="nds_percent"
               emptyTitle="Без НДС"
               label="НДС %"
-              setData={async () => {
-                return await ModelDataSource({
+              setData={async () =>
+                await ModelDataSource({
                   model: Dict,
                   constraints: {
-                    where: { assoc_table: "nds" }
+                    where: { assoc_table: "nds" },
                   },
                   dataPath: "data.0.data",
-                });
-              }}
+                })
+              }
               onSelect={(newValue) => {
                 setNdsPercent(newValue);
                 recalc(summa, ndsSumma, newValue);
@@ -109,25 +115,27 @@ const AddForm = props => {
           </Field>
         </div>
 
-        <div className="fieldset" style={{ gridTemplateColumns: "30% 30% 30%" }}>
-
+        <div
+          className="fieldset"
+          style={{ gridTemplateColumns: "30% 30% 30%" }}
+        >
           <Field>
-            <InputDate label="Дата оплаты" name="date_payment"/>
+            <InputDate label="Дата оплаты" name="date_payment" />
           </Field>
 
           <Field>
             <Select
               name="pay_type"
               label="Вид оплаты"
-              setData={async () => {
-                return await ModelDataSource({
+              setData={async () =>
+                await ModelDataSource({
                   model: Dict,
                   constraints: {
-                    where: { assoc_table: "payments_types" }
+                    where: { assoc_table: "payments_types" },
                   },
                   dataPath: "data.0.data",
-                });
-              }}
+                })
+              }
               optionValueKey="value"
               optionTitle={(record) => record.attributes.name}
               onSelect={(newValue) => {
@@ -136,7 +144,11 @@ const AddForm = props => {
             />
           </Field>
           <Field>
-            <Input label="Процент оплаты %" name="percent_of_bill" type="float"/>
+            <Input
+              label="Процент оплаты %"
+              name="percent_of_bill"
+              type="float"
+            />
           </Field>
         </div>
 
@@ -147,77 +159,74 @@ const AddForm = props => {
             <Select
               name="vo_code"
               label="Код валютной операции"
-              setData={async () => {
-                return await ModelDataSource({
+              setData={async () =>
+                await ModelDataSource({
                   model: Dict,
                   constraints: {
-                    where: { assoc_table: "payments_currency_types" }
+                    where: { assoc_table: "payments_currency_types" },
                   },
                   dataPath: "data.0.data",
-                });
-              }}
+                })
+              }
               optionValueKey="value"
-              optionTitle={(record) => `${record.attributes.name} (${record.attributes.value})`}
+              optionTitle={(record) =>
+                `${record.attributes.name} (${record.attributes.value})`
+              }
             />
           </Field>
-
         </div>
 
         <div className="fieldset__title">Назначение платежа</div>
 
         <div className="fieldset" style={{ gridTemplateColumns: "100%" }}>
           <Field>
-            <TextArea name="purpose" onInput={(newValue, props) => {
-              setPurposeLength(newValue.length);
-              setPurpose(newValue);
-            }}/>
+            <TextArea
+              name="purpose"
+              onInput={(newValue, props) => {
+                setPurposeLength(newValue.length);
+                setPurpose(newValue);
+              }}
+            />
           </Field>
         </div>
 
         <div>
-          {purposeLength &&
+          {purposeLength && (
             <div style={purposeStyle}>
-              <p style={{ color: "#ccc" }}>Символов назначени: {purposeLength}</p>
+              <p style={{ color: "#ccc" }}>
+                Символов назначени: {purposeLength}
+              </p>
               <p>
-                (({record.attributes.vo_code})) Счет № {bill.number} от {moment(bill.date)
-                .format("DD.MM.Y")},
-                % Предоплата
+                (({record.attributes.vo_code})) Счет № {bill.number} от{" "}
+                {moment(bill.date).format("DD.MM.Y")}, % Предоплата
               </p>
               <p>{purpose}</p>
               <p>Сумма {summa}</p>
               <p>
-                {!ndsPercent &&
-                  <span>Без НДС</span>
-                }
-                {ndsPercent &&
-                  `В т.ч. НДС ${ndsPercent}% ${ndsSumma}`
-                }
+                {!ndsPercent && <span>Без НДС</span>}
+                {ndsPercent && `В т.ч. НДС ${ndsPercent}% ${ndsSumma}`}
               </p>
             </div>
-          }
+          )}
         </div>
 
         <div className="fieldset__title">Примечание / Anmerkungen</div>
 
         <div className="fieldset" style={{ gridTemplateColumns: "100%" }}>
           <Field>
-            <TextArea name="comment" onInput={() => {
-
-            }}/>
+            <TextArea name="comment" onInput={() => {}} />
           </Field>
         </div>
-
 
         <Field>
           <Button
             style={{
               width: "140px",
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           />
         </Field>
       </Form>
-
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import History from './history'
-import HistoryItem from './history-item'
+import History from "./history";
+import HistoryItem from "./history-item";
 
-export { HistoryItem }
-export default History
+export { HistoryItem };
+export default History;

@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
 //import { Field, InputBare } from "porabote/form";
-import { Field, InputBare } from "@/app/form";
 import SearchIcon from "@material-ui/icons/Search";
-import Statuses from "@/components/statuses/models/Statuses";
-import FilterTopStatuses from "./filter-top-statuses";
 import { ModelDataSource } from "../../../app/DataSources";
+import FilterTopStatuses from "./filter-top-statuses";
+import { Field, InputBare } from "@/app/form";
+import Statuses from "@/components/statuses/models/Statuses";
 import "./top-panel.less";
 
 const FilterTop = (props) => {
-
   const [statuses, setStatuses] = useState([]);
-  let clientId = props.formContext.entity.getAttribute("where.client_id");
+  const clientId = props.formContext.entity.getAttribute("where.client_id");
 
   useEffect(() => {
     fetchStatuses();
   }, []);
 
   const fetchStatuses = async () => {
-    let statuses = await ModelDataSource({
+    const statuses = await ModelDataSource({
       model: Statuses,
       constraints: {
-        where: { model_alias: "App.Payments" }
+        where: { model_alias: "App.Payments" },
       },
     });
 
@@ -30,11 +29,13 @@ const FilterTop = (props) => {
   return (
     <>
       <div className="fast-find__item">
-        <SearchIcon style={{
-          color: "#888",
-          fontSize: 22,
-          padding: "4px 8px"
-        }}/>
+        <SearchIcon
+          style={{
+            color: "#888",
+            fontSize: 22,
+            padding: "4px 8px",
+          }}
+        />
         <Field>
           <InputBare
             placeholder="Поиск по номеру счёта"
@@ -50,12 +51,15 @@ const FilterTop = (props) => {
       </div>
 
       <Field>
-        <FilterTopStatuses setAllChecked={props.setAllChecked} clientId={clientId} key="filterStatuses" data={statuses}/>
+        <FilterTopStatuses
+          setAllChecked={props.setAllChecked}
+          clientId={clientId}
+          key="filterStatuses"
+          data={statuses}
+        />
       </Field>
-
     </>
   );
-
 };
 
 export default FilterTop;
