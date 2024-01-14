@@ -4,12 +4,15 @@ import {NavLink} from "react-router-dom";
 // import TopBarIcons from "./top-bar-icons";
 import Navbar from "./navbar";
 import TreeMapper from "@app/collections/TreeMapper";
-import Api from "@api";
-import Logo from "../../../resources/svg/logo.svg";
+import Api from "@/services";
+import Logo from "@/resources/svg/logo.svg";
 import {useAppSelector} from "@app/hooks/hooks";
+import TopBarIcons from "@/components/layout/header/top-bar-icons";
+import Profile from "@/components/layout/header/profile";
+import Icon from "@app/ui/icons";
 
 type authProps = {
-    isAuth: boolean;
+  isAuth: boolean;
 };
 
 const Header = () => {
@@ -41,15 +44,17 @@ const Header = () => {
       <div className="header-panel">
 
         <NavLink className="header-panel__logo" to={"/"}>
-          <img style={{width: "36px"}} src={Logo}/>
+          <img style={{width: "110px"}} src={Logo}/>
         </NavLink>
         {auth.isAuth &&
           <Navbar data={menuTree}/>
         }
-        {/*{auth.isAuth &&*/}
-        {/*  <TopBarIcons/>*/}
-        {/*}*/}
-        {/*<Profile perms={perms} auth={props.auth}/>*/}
+        {!auth.isAuth &&
+          <Icon>
+            <TopBarIcons size={20}/>
+          </Icon>
+        }
+        <Profile perms={perms} auth={auth}/>
 
       </div>
     </header>

@@ -3,8 +3,8 @@ import Router from '@app/routes/router';
 // import AuthLogin from "@components/auth/auth-login";
 // import Modal from 'porabote/modal';
 // import Confirm from "porabote/confirm";
-import Header from '@components/layout/header';
-import "../../resources/styles/styles";
+import Header from '@/components/layout/header';
+import "@/resources/styles/styles";
 
 const LoginLayout = () => {
 

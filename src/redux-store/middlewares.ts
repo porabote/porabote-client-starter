@@ -5,18 +5,16 @@ import authWatcher from "@app/auth/redux-store/auth-saga";
 
 const staticSagas = [authWatcher()];
 
-const createSaga = (asyncSaga = []) =>
-  function* () {
+const createSaga = (asyncSaga: {[key: string]: any}[] = []) => {
+  return function* () {
     yield all([
       ...staticSagas,
-      ...asyncSaga
-    ]);
-  };
+      ...asyncSaga,
+    ])
+  }
+}
 
 const sagaMiddleware = createSagaMiddleware();
 
-export {
-  createSaga,
-  sagaMiddleware,
-  thunkMiddleware
-};
+
+export {createSaga, sagaMiddleware, thunkMiddleware};

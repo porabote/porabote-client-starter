@@ -1,10 +1,9 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import "./navbar.less";
-//import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import "@/resources/styles/navbar.less";
 
 type navbarProps = {
-  data: {key: number};
+  data: {[key: number]: any};
 };
 
 const Navbar = (props: navbarProps) => {

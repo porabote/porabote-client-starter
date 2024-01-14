@@ -17,12 +17,12 @@ module.exports = (webpackEnv) => {
     context: path.join(__dirname, "../"),
     stats: "errors-warnings",
     entry: {
-      main: "./src/index.js",
+      main: "./src/index.tsx",
     },
     output: {
       path: (isEnvProduction) ? path.join(__dirname, "../build") : path.join(__dirname, "../dist"),
       filename: "[name].[fullhash].bundle.js",
-      publicPath: (isEnvProduction) ? "/porabote" : "/",
+      publicPath: (isEnvProduction) ? "/" : "/",
     },
     resolve: {
       extensions: [".js", ".ts", ".jsx", ".tsx", ".ttf"],

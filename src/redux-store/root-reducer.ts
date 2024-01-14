@@ -5,11 +5,11 @@ const staticReducers = {
   auth: authReducer,
 };
 
-function createReducer(asyncReducers: {}) {
+function createReducer(asyncReducers?: any) {
   return combineReducers({
     ...staticReducers,
-    ...asyncReducers,
-  });
+    ...asyncReducers
+  })
 }
 
 export default createReducer;

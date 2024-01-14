@@ -1,0 +1,5 @@
+export const OPEN_MODAL = "OPEN_MODAL_TS";
+export const CLOSE_MODAL = "CLOSE_MODAL_TS";
+export const PUSH_MODAL_ITEM = "PUSH_MODAL_TS_ITEM";
+export const REMOVE_MODAL_ITEM = "REMOVE_MODAL_TS_ITEM";
+export const SET_ACTIVE_ITEM = "SET_ACTIVE_TS_ITEM";
