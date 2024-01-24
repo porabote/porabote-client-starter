@@ -1,13 +1,6 @@
-import React, {ReactElement} from "react";
+import * as React from "react";
 import {removeModalItem} from "./redux-store/actions";
-
-export type modalItemProps = {
-  itemkey: number;
-  activeItemKey: number;
-  key: number,
-  title: string;
-  content: ReactElement<any>;
-};
+import {modalItemProps} from "./types";
 
 const ModalItem = (props: modalItemProps) => {
 

@@ -1,7 +1,7 @@
 import React from "react";
-import defaultStyle from "./default-style";
+import {IconType} from "@app/ui/icons/types";
 
-const RefreshIcon = (props: {style: {}}) => {
+const RefreshIcon = (props: IconType) => {
 
   return (
 		<svg width={props.size} height={props.size} viewBox={`0 0 50 50`} fill="none" xmlns="http://www.w3.org/2000/svg">

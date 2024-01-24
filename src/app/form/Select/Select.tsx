@@ -1,44 +1,17 @@
 import React, {useState, useEffect, useRef, MutableRefObject, MouseEvent, ChangeEvent, MouseEventHandler} from "react";
-import ArrayMapper from "@/app/Collections/ArrayMapper";
-import Option, {OptionProps} from "./Option";
-import {FormContextInterface} from "../FormContext";
+import ObjectMapper from "@/app/collections/ObjectMapper";
+import Option from "./Option";
+import {OptionType, SelectType} from "../types";
 import SelectTags from "./SelectTags";
 
-type setData = () => { [key: string]: any; }[];
-
-export interface ISelect {
-  dataStorage: any[];
-  children?: React.ReactElement;
-  formContext: FormContextInterface;
-  isEmpty?: boolean | undefined;
-  emptyTitle?: string | undefined;
-  value: string | number | number[] | null;
-  label: string;
-  name: string;
-  options: { props: OptionProps }[] | [];
-  optionValueKey: string | number;
-  optionTitle: (record: { attributes: {}, relationships: {} }) => string;
-  setData: setData;
-  isMiltiple?: boolean | undefined;
-  setTagTitle?: (value: number | string, dataStorage: any[], dataStorageMap: {}) => string;
-  buttons?: [];
-  onSelect?: (
-    newValue: any,
-    formContext: FormContextInterface,
-    props: ISelect,
-    dataStorage: any[],
-    dataStorageMap: any[]
-  ) => void | null | undefined; // TODO
-};
-
-const Select = (props: ISelect) => {
+const Select = (props: SelectType) => {
 
   const initValue = () => {
-    let value: any = props.value || "";
-    if (props.isMiltiple && Array.isArray(props.value)) value = new Set(props.value);
+    let value: string | number | number[] | Set<any> = props.value || "";
+    if (props.isMultiple && Array.isArray(props.value)) value = new Set(props.value);
 
-    if (props.formContext.entity) {
-      props.formContext.entity.setAttribute(props.name, value);
+    if (props.formContext) {
+      props.formContext.setValue(props.name, value);
     }
 
     return value;
@@ -47,7 +20,7 @@ const Select = (props: ISelect) => {
   const [isDataStorageLoaded, setIsDataStorageLoaded] = useState(false);
   const [dataStorage, setDataStorage] = useState<{}[]>([]);
   const [dataStorageMap, setDataStorageMap] = useState({});
-  const [options, setOptions] = useState<{ props: OptionProps }[] | []>([]);
+  const [options, setOptions] = useState<{ props: OptionType }[] | []>([]);
   const [value, setValue] = useState(null);
   const [name, setName] = useState(props.name || "");
   const [optionValueKey, setOptionValueKey] = useState(props.optionValueKey || "id");
@@ -59,7 +32,7 @@ const Select = (props: ISelect) => {
   const [seekValue, setSeekValue] = useState("");
   const [searchPhrase, setSearchPhrase] = useState("");
   const [seekDelay, setSeekDelay] = useState(300);
-  const [isMultiple, setIsMultiple] = useState(props.isMiltiple || false);
+  const [isMultiple, setIsMultiple] = useState(props.isMultiple || false);
   const [inputValue, setInputValue] = useState("");
   const [isOpened, setIsOpened] = useState(false);
   const [buttons] = useState(props.buttons || []);
@@ -98,7 +71,7 @@ const Select = (props: ISelect) => {
     setDataStorage([...data]);
 
     let dataStorageMap: { [key: number]: number } = {};
-    data.map((item: any, index: number) => dataStorageMap[ArrayMapper.getValueByPath(optionValueKey, item)] = index);
+    data.map((item: any, index: number) => dataStorageMap[ObjectMapper.getValueByPath(optionValueKey, item)] = index);
     setDataStorageMap(dataStorageMap);
 
     setIsDataStorageLoaded(true);
@@ -116,7 +89,7 @@ const Select = (props: ISelect) => {
 
     let optionsList: any[] = dataStorage.map((item: { [key: string]: any; }, index: number): {} => {
 
-      let optionValue = ArrayMapper.getValueByPath(optionValueKey, item);
+      let optionValue = ObjectMapper.getValueByPath(optionValueKey, item);
 
       let itemTitle: string = optionTitle({attributes: item.attributes || item, relationships: item.relationships});
       let isSelected = (value == optionValue) ? true : false;
@@ -176,8 +149,8 @@ const Select = (props: ISelect) => {
 
     setSeekValue("");
 
-    if (props.formContext.entity) {
-      props.formContext.entity.setAttribute(name, newValue);
+    if (props.formContext) {
+      props.formContext.setValue(name, newValue);
     }
 
     if (typeof onSelect === "function") {
@@ -187,7 +160,7 @@ const Select = (props: ISelect) => {
     //e.preventDefault();
   }
 
-  const onSelectMultiple = (newValue: any, optionProps: OptionProps, e: MouseEvent<HTMLDivElement>) => {
+  const onSelectMultiple = (newValue: any, optionProps: OptionType, e: MouseEvent<HTMLDivElement>) => {
 
     if (!newValue) return;
 
@@ -195,8 +168,8 @@ const Select = (props: ISelect) => {
     setValue(value);
     setIsOpened(false);
 
-    if (props.formContext.entity) {
-      props.formContext.entity.setAttribute(name, Array.from(value));
+    if (props.formContext) {
+      props.formContext.setValue(name, Array.from(value));
     }
 
   }
@@ -210,7 +183,7 @@ const Select = (props: ISelect) => {
   }
 
   const setElementPositions = () => {
-    dropPanel.current.style.top = "34px";
+    dropPanel.current.style.top = "36px";
   }
 
 
@@ -302,7 +275,7 @@ const Select = (props: ISelect) => {
 
   return (
     <div className="form-item flex no_padding">
-      <label className="form-item__label">{label}</label>
+      <label className="form_item__label">{label}</label>
       <div
         className="form-item__select-wrap"
         ref={wrap}

@@ -1,15 +1,9 @@
-import React, {} from 'react';
+import * as React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {modalActions} from "./";
+import modalActions from "./modal-actions";
 import ModalTab from './modal-tab';
-import ModalItem, {modalItemProps} from './modal-item';
-import './modal-container.less';
-
-type modalStateProps = {
-    items: modalItemProps[];
-    isOpen: boolean;
-    activeItemKey: number;
-};
+import ModalItem from './modal-item';
+import {contentType, modalStateProps} from "./types";
 
 const ModalContainer = () => {
 
@@ -17,12 +11,11 @@ const ModalContainer = () => {
 
   let modalState: modalStateProps = useSelector(((state: {modal_ts: modalStateProps}) => state.modal_ts));
 
-
   return (
     <div
       className={modalState.isOpen ? "modal active" : "modal"}
       onClick={() => {
-        modalActions.closeModal();
+        //modalActions.close(dispatch);
       }}
     >
       <div

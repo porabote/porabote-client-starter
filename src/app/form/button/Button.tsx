@@ -1,31 +1,26 @@
-import React, {MouseEvent, useState} from 'react';
-import {FormContextInterface} from "../FormContext";
+import React, {useContext, useState} from 'react';
 import Icon, {LoaderClockIcon} from "@/app/ui/icons";
-import "./Button.less";
-import {FieldChildType} from "../Field/FieldTypes";
-
-type buttonProps = {
-  icon?: string;
-  isVisible?: Function;
-  setIsButtonLoading: any;
-};
+import {ButtonPropsType} from "../types";
+import formContext from "../FormContext";
 
 const loaderIcon = <Icon><LoaderClockIcon/></Icon>
 
-const Button = (props: FieldChildType<buttonProps> & {children?: React.ReactChildren}) => {
+const Button = (props: ButtonPropsType) => {
 
-  const [className, setClassName] = useState(props.className || "prb-button yellow");
-  const [label, setLabel] = useState(props.label || "Сохранить");
+  let context = useContext(formContext);
+
+  const [className, setClassName] = useState(props.className || "prb-button");
+  const [label, setLabel] = useState(props.label || '');
   const [icon, setIcon] = useState(props.icon || loaderIcon);
   const [style, setStyle] = useState(props.style || {});
   const [isButtonLoading, setIsButtonLoading] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>): void => {
-    if (props.formContext && typeof props.onClick != "function") {
-      props.formContext.submit();
+    if (props.type == "submit") {
+      context.onSubmit(context);
     } else {
       if (!isButtonLoading && typeof props.onClick !== "undefined") {
-        props.onClick(event, {...props, elementProps: {setIsButtonLoading}});
+        props.onClick(event, props);
       }
     }
   }
@@ -37,7 +32,7 @@ const Button = (props: FieldChildType<buttonProps> & {children?: React.ReactChil
   }
 
   return (
-    <div className="prb-button-wrap">
+
       <div
         className={`${className} ${isButtonLoading ? "" : ""}`}
         style={{
@@ -47,10 +42,12 @@ const Button = (props: FieldChildType<buttonProps> & {children?: React.ReactChil
         onClick={handleClick}
       >
         {isButtonLoading && loaderIcon}
-        {props.children}
+        {props.children &&
+          props.children
+        }
         {label}
       </div>
-    </div>
+
   );
 };
 

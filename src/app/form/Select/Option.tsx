@@ -1,20 +1,9 @@
 import React, {useState, MouseEvent} from 'react'
+import {OptionType} from "../types";
 
-export type OptionProps = {
-  children: string;
-  selected: boolean;
-  value: string;
-  key: number | string;
-  isMultiple:  boolean;
-  onSelect?: (value: any, props: OptionProps, mouseEvent: React.MouseEvent<HTMLDivElement>) => any;
-  onSelectMultiple?: (value: any, props: OptionProps, mouseEvent: React.MouseEvent<HTMLDivElement>) => any;
-  dataStorage: any[];
-  dataStorageMap: any[];
-};
+export type IOption = (props: OptionType) => JSX.Element;
 
-export type IOption = (props: OptionProps) => JSX.Element;
-
-const Option: IOption = (props: OptionProps) => {
+const Option: IOption = (props: OptionType) => {
 
   const [value, setValue] = useState(props.value);
 
@@ -30,8 +19,7 @@ const Option: IOption = (props: OptionProps) => {
   return (
     <div
       onMouseDown={onMouseDown}
-      className="form-item__select__drop-link"
-    >
+      className="form-item__select__drop-link">
       {props.children}
     </div>
   )

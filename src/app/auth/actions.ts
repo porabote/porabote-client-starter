@@ -1,6 +1,13 @@
-import Api from "../../services";
+import Api from "@/services";
 
 const AuthActions = () => {
+
+  const authCheck = () => {
+    const access_token = localStorage.getItem('access_token');
+    if (access_token) {
+      //dispatch(authCheckSuccess(access_token));
+    }
+  }
 
   function login(data: {}) {
 

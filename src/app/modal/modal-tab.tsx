@@ -1,5 +1,5 @@
-import React, {ReactElement, JSXElementConstructor} from 'react'
-import {modalActions} from "./";
+import React from 'react'
+import modalActions from "./modal-actions";
 
 export type modalTabProps = {
   itemkey: number;

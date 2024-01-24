@@ -1,15 +1,23 @@
-import React, {ChangeEvent, useState, useEffect, useContext} from 'react';
-import FormContext, {FormContextInterface} from "../FormContext";
+import React, {ChangeEvent, useState, useEffect, useContext, createElement, useRef} from 'react';
+import formContext from "../FormContext";
 import {FloatType} from "@/app/types";
-import {FieldChildType} from "../Field/FieldTypes";
+import {FieldChildType} from "../types";
 
-const Input = (props: FieldChildType) => {
+type InputType = {
+  icons?: any[];
+};
 
-  let context = useContext(FormContext);
+const Input = (props: FieldChildType<InputType>) => {
+
+  useEffect(() => {}, []);
+
+  const inputRef = useRef(null);
+  let context = useContext(formContext);
 
   const [name] = useState(props.name || "");
 
-  const inputType = props.type || 'string';
+  const [inputType, setInputType] = useState(props.type || 'string');
+
   const htmlFor = `${inputType}-${Math.random()}`;
 
   let label = (typeof props.label != "undefined") ?
@@ -24,7 +32,7 @@ const Input = (props: FieldChildType) => {
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
-    context.setAttribute(name, setTypeFormat(newValue));
+    context.setValue(name, setTypeFormat(newValue));
   }
 
   const setTypeFormat = (rawValue: string) => {
@@ -38,18 +46,25 @@ const Input = (props: FieldChildType) => {
     return value || "";
   }
 
+  // const onCLickByIcon = (e) => {
+  //   setInputType('text');
+  // }
+
+  let value = context.getValue(name);
+
   return (
     <div className="form_item">
       {label}
       <div className="form_item__input_wrap">
         <input
+          ref={inputRef}
           type={inputType}
           placeholder={props.placeholder}
           id={htmlFor}
           name={name}
-          value={setTypeFormat(props.value)}
+          value={setTypeFormat(value)}
           disabled={disabled}
-          className={props.class || 'form_item__text'}
+          className={props.class || 'form_item__input'}
           autoComplete="off"
           onChange={onChangeInput}
           onInput={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -59,6 +74,17 @@ const Input = (props: FieldChildType) => {
             props.onInput(e.target.value, {...props});
           }}
         />
+
+        {props.elementProps && props.elementProps.icons &&
+          props.elementProps.icons.map((item, index) => {
+            return React.cloneElement(item, {
+              ...item.props,
+              key: index,
+              setInputType,
+            });
+          })
+        }
+
       </div>
     </div>
   );

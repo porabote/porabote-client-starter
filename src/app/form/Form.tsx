@@ -1,79 +1,54 @@
 import React, {useEffect, useState} from 'react';
-import {FormProvider} from "./FormContext";
-import IModel from "../models/i-model";
-import Entity, {IEntity} from "../models/entity";
-import "./Form.less";
+import {FormContextType, FormType} from "./types";
+import ObjectMapper from "../collections/ObjectMapper";
+import FormContext from "./FormContext";
 
-interface FormProps {
-  method: string;
-  model: IModel;
-  entity: IEntity;
-  children: React.ReactNode[];
-  onSubmit?: (entity: IEntity) => {};
-  initValues: {};
-  setEntity: Function;
-}
+const Form = ({initValues = {}, children, onSubmit, method = "POST"}: FormType) => {
 
-const Form = ({model, initValues, setEntity, children, onSubmit, method = "POST"}: FormProps) => {
+  const [values, setValues] = useState(initValues);
+  //const [formKey, setFormKey] = useState(0);
 
-  let initEntity: IEntity = new Entity(model, initValues);
 
-  const [entity, setFormEntity] = useState(initEntity);
-  const [formKey, setFormKey] = useState(0);
+  useEffect(() => {
+  }, []);
 
-  try {
-
-    useEffect(() => {
-      initEntity();
-    }, []);
-
-    const initEntity = async () => {
-      let entity = null;
-
-      if (typeof setEntity == "function") {
-        entity = setEntity();
-      }
-
-      setFormEntity(entity);
+  const onSubmitHandler = (context: FormContextType) => {
+    if (onSubmit) {
+      onSubmit(context);
     }
-
-    const submit = (): void => {
-
-      if (!entity) return;
-
-      if (typeof onSubmit == "function") {
-        onSubmit(entity);
-      } else {
-        entity.save();
-      }
-    }
-
-    const setAttribute = (attributeName: string, value: any, mode?: string): void => {
-
-      if (!entity) return;
-
-      if (!mode) mode = 'merge';
-
-      entity.setAttribute(attributeName, value, mode);
-      let randomValue = Math.random() * 1000;
-      setFormKey(randomValue); // For form rerender
-    }
-
-    if (!entity) return <span>Загрузка</span>;
-
-    return (
-      <FormProvider value={{
-        entity,
-        setAttribute,
-        // updateFormEntity,
-        submit,
-      }}>
-        {children}
-      </FormProvider>
-    );
-  } catch (e) {
-    console.log(e);
   }
+
+  const setValue = (name: string, value: any, mode: string  = 'merge'): void => {
+
+    //if (!mode) mode = 'merge';
+
+    let newValues = ObjectMapper.setValue(name, value, values, mode);
+
+    setValues({...newValues});
+
+    //let randomValue = Math.random() * 1000;
+    //setFormKey(randomValue); // For form rerender
+  }
+
+  const getValue = (name: string) => {
+    return ObjectMapper.getValueByPath(name, values);
+  }
+
+  const initFormContextValues = {
+    values,
+    getValue,
+    setValue,
+    onSubmit: onSubmitHandler,
+  }
+
+  const { Provider: FormProvider, Consumer: FormConsumer } = FormContext;
+
+  return (
+    <FormProvider value={{...initFormContextValues}}>
+      {children}
+    </FormProvider>
+  );
+
 }
 
 export default Form;

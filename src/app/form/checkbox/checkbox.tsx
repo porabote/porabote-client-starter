@@ -1,8 +1,12 @@
 import React, {MouseEventHandler, useState, useEffect} from 'react';
-import {FieldChildType} from "../Field/FieldTypes";
+import {FieldChildType} from "../types";
 import "./checkbox.less";
 
-const Checkbox = (props: FieldChildType) => {
+type CheckBoxType = {
+
+};
+
+const Checkbox = (props: FieldChildType<CheckBoxType>) => {
 
   const [isChecked, setIsChecked] = useState(props.value ? true : false);
   const [htmlFor, setHtmlFor] = useState(`checkbox-${Math.random()}`);
@@ -35,7 +39,7 @@ const Checkbox = (props: FieldChildType) => {
     setIsChecked(newStatus ? true : false);
 
     if (props.formContext) {
-      props.formContext.setAttribute(props.name, newStatus);
+      props.formContext.setValue(props.name, newStatus);
     }
 
     setValue(newStatus);

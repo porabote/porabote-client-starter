@@ -1,16 +1,22 @@
 import {createStore, compose, applyMiddleware, Dispatch} from "redux";
+import { configureStore } from '@reduxjs/toolkit'
 import {createSaga, sagaMiddleware, thunkMiddleware} from "./middlewares";
 import createReducer from "./root-reducer";
 
-const store = createStore(
-  createReducer(),
-  compose(
-    applyMiddleware(
-      thunkMiddleware,
-      sagaMiddleware,
-    )
-  ),
-);
+
+const store = configureStore({
+    reducer: createReducer(),
+    middleware:(getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware)
+
+    //   compose(
+    //     applyMiddleware(
+    //   thunkMiddleware,
+    //   sagaMiddleware,
+    // )
+});
+
+
+
 
 let asyncReducers: {[key: string]: any} = {};
 let asyncSagas: {[key: string]: any}[] = [];
@@ -33,14 +39,14 @@ export let registrationSaga: (key: string, asyncSaga: any) => void = (key, async
   }
 }
 
-export type RootStateType = ReturnType<typeof store.getState>;
-const RootState = store.getState;
+export type RootState = ReturnType<typeof store.getState>;
+//const RootState = store.getState;
 
-export type AppDispatchType = typeof store.dispatch;
-const AppDispatch: Dispatch<any> = store.dispatch;
+export type AppDispatch = typeof store.dispatch;
+// const AppDispatch: Dispatch<any> = store.dispatch;
 
-export {
-  RootState,
-  AppDispatch,
-};
+// export {
+//   RootState,
+//   AppDispatch,
+// };
 export default store;

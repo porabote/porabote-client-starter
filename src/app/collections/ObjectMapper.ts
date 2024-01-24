@@ -1,13 +1,48 @@
 class ObjectMapper {
 
-  getValueByPath = (path: string | null, source: { [key: string | number]: any | null } | null): any | null => {
+  setValue(name: string, value: any, values: {[key: string]: any}, mode?: string) {
 
-    if (!path) return null;
+    if (!mode) mode = 'merge';
 
-    let pathArray = path.split('.');
+    const valueBranch = this.buildPathBranch(name, value)
+
+    switch (mode) {
+      case 'merge': //if value is string or object
+        values = this.mergeValues(values, valueBranch);
+        break;
+      case 'delete': // unset value ( with key )
+        values = this.deleteValue(values, name);
+        break;
+      case 'replace': // if value is array - target array will be replaced to source array
+        values = this.replaceValue(values, valueBranch);
+        break;
+      case 'push': // if value is array - source array will be added to target array
+        values = this.pushValue(values, name, value);
+        break;
+      case 'spliceByKey': // if value is array - source array will be removed from target array
+        values = this.spliceByKey(values, name, value)
+        break;
+      case 'patch': // Set new path in source
+        values = this.setPatch(values, name, value)
+        break;
+    }
+
+    return Object.assign(values, values);
+
+  }
+  
+  getValueByPath = (path: string | number, source: { [key: string | number]: any | null } | null): any | null => {
+
+    let pathArray = [];
+    if (typeof path == "string") {
+      pathArray = path.split('.');
+    } else {
+      pathArray = [path];
+    }
+
     let cursor = source;
 
-    pathArray.map((key) => {
+    pathArray.map((key: number | string) => {
       if (!cursor || typeof cursor[key] == "undefined") {
         cursor = null;
       } else {

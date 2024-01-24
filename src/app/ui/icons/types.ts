@@ -8,4 +8,6 @@ export type IconType = {
   style?: {[key: string] : any};
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactElement<any, string | React.JSXElementConstructor<any>>;
+  handleOnMouseDown?: (e: React.MouseEvent<HTMLDivElement>, props: {[key: string]: any}) => void;
+  handleOnMouseUp?: (e: React.MouseEvent<HTMLDivElement>, props: {[key: string]: any}) => void;
 }

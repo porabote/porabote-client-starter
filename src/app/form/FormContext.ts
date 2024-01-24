@@ -1,23 +1,19 @@
 import React, { createContext } from "react";
-import Entity, {IEntity} from "../models/entity";
+import {FormContextType} from "./types";
 
-export interface FormContextInterface {
-  entity?: IEntity | null;
-  submit: (...args: any[]) => any;
-  setAttribute(name: string, number: number | string): void;
+const initContextValues = {
+  setValue(name: string, number: number | string): void {},
+  getValue: (name: string) => {},
+  values: {},
+  onSubmit: () => {}
 };
 
-const FormContext = createContext<FormContextInterface>({
-  setAttribute(name: string, number: number | string): void {
-  },
-  entity: null,
-  submit: () => {}
-});
+const formContext: React.Context<FormContextType> = createContext<FormContextType>(initContextValues);
 
-const { Provider: FormProvider, Consumer: FormConsumer } = FormContext;
+const { Provider: FormProvider, Consumer: FormConsumer } = formContext;
 
 export {
   FormProvider,
   FormConsumer
 }
-export default FormContext;
+export default formContext;

@@ -16,7 +16,7 @@ const TopBarIcons = () => {
   return (
     <div className="header-panel__top-bar-icons">
       <NavLink to="/users/contacts/">
-        <Icon className="header-panel__top-bar-icons__contacts">
+        <Icon size={24} className="header-panel__top-bar-icons__contacts"  fill={`#FFFFFF`} fillHover={`#FFFFFF`}>
           <GroupIcon/>
         </Icon>
       </NavLink>

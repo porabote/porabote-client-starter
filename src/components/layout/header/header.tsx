@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
-// import Profile from "./profile";
-// import TopBarIcons from "./top-bar-icons";
 import Navbar from "./navbar";
 import TreeMapper from "@app/collections/TreeMapper";
 import Api from "@/services";
@@ -44,17 +42,17 @@ const Header = () => {
       <div className="header-panel">
 
         <NavLink className="header-panel__logo" to={"/"}>
-          <img style={{width: "110px"}} src={Logo}/>
+          {auth.isAuth &&
+            <img style={{width: "110px"}} src={Logo}/>
+          }
         </NavLink>
         {auth.isAuth &&
           <Navbar data={menuTree}/>
         }
-        {!auth.isAuth &&
-          <Icon>
-            <TopBarIcons size={20}/>
-          </Icon>
+        {auth.isAuth &&
+          <TopBarIcons/>
         }
-        <Profile perms={perms} auth={auth}/>
+        {/*<Profile perms={perms} auth={auth}/>*/}
 
       </div>
     </header>

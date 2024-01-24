@@ -1,7 +1,4 @@
-import Modal from "./redux-store/actions";
-import reducer from "./redux-store/reducer";
+import actions from "./modal-container";
+import './assets/style.less';
 
-export {
-    reducer,
-}
-export default Modal;
+export default actions;
