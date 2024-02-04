@@ -26,7 +26,7 @@ const AuthActions = () => {
     // });
   }
 
-  static function parseJwt(token: string) {
+  function parseJwt(token: string) {
     var base64Url = token.split('.')[1];
 
     if (base64Url === undefined) return null;
@@ -55,6 +55,15 @@ const AuthActions = () => {
     };
     localStorage.setItem('access_token', access_token);
     localStorage.setItem('porabote_user', JSON.stringify(data));
+  }
+
+
+  const getToken = () => {
+    let accessToken = localStorage.getItem("access_token");
+    if (typeof accessToken === "object") {
+      accessToken = "";
+    }
+    return accessToken;
   }
 
 }

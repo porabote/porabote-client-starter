@@ -24,6 +24,7 @@ const Field = (props: FieldPropsType) => {
   return React.cloneElement(props.children, {
     key: name,
     value,
+    context,
     props,
   });
 

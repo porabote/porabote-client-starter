@@ -31,7 +31,7 @@ const Form = ({initValues = {}, children, onSubmit, method = "POST"}: FormType) 
   }
 
   const getValue = (name: string) => {
-    return ObjectMapper.getValueByPath(name, values);
+    return ObjectMapper.get(name, values);
   }
 
   const initFormContextValues = {

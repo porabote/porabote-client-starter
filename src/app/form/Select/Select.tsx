@@ -1,30 +1,39 @@
-import React, {useState, useEffect, useRef, MutableRefObject, MouseEvent, ChangeEvent, MouseEventHandler} from "react";
+import React, {useState, useEffect, useRef, MutableRefObject, MouseEvent, ChangeEvent, FocusEventHandler} from "react";
 import ObjectMapper from "@/app/collections/ObjectMapper";
 import Option from "./Option";
-import {OptionType, SelectType} from "../types";
+import {SelectOptionValueType, SelectType} from "../types";
 import SelectTags from "./SelectTags";
+import {RecordType} from "@/services/types";
 
 const Select = (props: SelectType) => {
 
-  const initValue = () => {
-    let value: string | number | number[] | Set<any> = props.value || "";
+  const initValue: () => SelectOptionValueType = () => {
+
+    let value: SelectOptionValueType = props.value || "";
     if (props.isMultiple && Array.isArray(props.value)) value = new Set(props.value);
 
-    if (props.formContext) {
-      props.formContext.setValue(props.name, value);
+    if (props.context) {
+      props.context.setValue(props.name, value);
     }
 
     return value;
   }
 
-  const [isDataStorageLoaded, setIsDataStorageLoaded] = useState(false);
-  const [dataStorage, setDataStorage] = useState<{}[]>([]);
-  const [dataStorageMap, setDataStorageMap] = useState({});
-  const [options, setOptions] = useState<{ props: OptionType }[] | []>([]);
-  const [value, setValue] = useState(null);
-  const [name, setName] = useState(props.name || "");
-  const [optionValueKey, setOptionValueKey] = useState(props.optionValueKey || "id");
-  const [optionTitle] = useState(() => props.optionTitle);
+  const optionTitleRender = (item: any) => {
+    if (props.optionTitle) {
+      return props.optionTitle;
+    }
+    return (item: any) => item.name;
+  }
+
+  const [isStorageLoaded, setIsStorageLoaded] = useState(false);
+  const [storage, setStorage] = useState<any[]>([]);
+  const [storageMap, setStorageMap] = useState({});
+  const [options, setOptions] = useState<React.JSX.Element[]>([]);
+  const [value, setValue] = useState<SelectOptionValueType>(null);
+  const [name] = useState(props.name || "");
+  const [optionValueKey] = useState(props.optionValueKey || "id");
+  const [optionTitle, setOptionTitle] = useState(optionTitleRender);
   const [label, setLabel] = useState(props.label || "");
   const [isDisabled, setIsDIsabled] = useState(false);
   const [isEmpty, setIsEmpty] = useState(props.isEmpty || true);
@@ -33,10 +42,10 @@ const Select = (props: SelectType) => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [seekDelay, setSeekDelay] = useState(300);
   const [isMultiple, setIsMultiple] = useState(props.isMultiple || false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState<string>("");
   const [isOpened, setIsOpened] = useState(false);
   const [buttons] = useState(props.buttons || []);
-  const [onSelect] = useState(() => props.onSelect || null);
+  const [onSelectCallback] = useState(() => props.onSelect || null);
   const [isInputFocus, setIsInputFocus] = useState(false);
 
   const wrap = useRef() as MutableRefObject<HTMLDivElement>;
@@ -54,44 +63,46 @@ const Select = (props: SelectType) => {
     setOptionsList();
 
     return () => {
-      //clearDataStorage([]);
+      //clearStorage([]);
     };
 
-  }, [isDataStorageLoaded, props.value]);
+  }, [isStorageLoaded, props.value]);
 
   const setData = async () => {
 
-    if (isDataStorageLoaded) return;
+    if (isStorageLoaded) return;
 
-    let data: {}[] = [];
+    let data: any[] = [];
     if (typeof props.setData == "function") {
       data = await props.setData();
+    } else if (typeof props.data != "undefined") {
+      data = props.data;
     }
 
-    setDataStorage([...data]);
+    setStorage([...data]);
 
-    let dataStorageMap: { [key: number]: number } = {};
-    data.map((item: any, index: number) => dataStorageMap[ObjectMapper.getValueByPath(optionValueKey, item)] = index);
-    setDataStorageMap(dataStorageMap);
+    let storageMap: Map<any, any> = new Map();
+    data.map((item: any, index: number) => storageMap.set(ObjectMapper.get(optionValueKey, item), index));
+    setStorageMap(storageMap);
 
-    setIsDataStorageLoaded(true);
+    setIsStorageLoaded(true);
 
   }
 
-  const clearDataStorage = () => {
-    setDataStorage([]);
-    setDataStorageMap([]);
+  const clearStorage = () => {
+    setStorage([]);
+    setStorageMap([]);
   }
 
   const setOptionsList = async () => {
 
     let selectedOptionTitle: string | null = null;
 
-    let optionsList: any[] = dataStorage.map((item: { [key: string]: any; }, index: number): {} => {
+    let optionsList: React.JSX.Element[] = storage.map((item: RecordType<any>, index: number): React.JSX.Element => {
 
-      let optionValue = ObjectMapper.getValueByPath(optionValueKey, item);
+      let optionValue = ObjectMapper.get(optionValueKey, item);
 
-      let itemTitle: string = optionTitle({attributes: item.attributes || item, relationships: item.relationships});
+      let itemTitle: string = optionTitle(item);
       let isSelected = (value == optionValue) ? true : false;
       if (isSelected) selectedOptionTitle = itemTitle;
 
@@ -100,12 +111,9 @@ const Select = (props: SelectType) => {
           key={optionValue}
           value={optionValue}
           selected={isSelected}
-          onSelect={onSelectAction}
-          onSelectMultiple={onSelectMultiple}
-          isMultiple={isMultiple}
-          dataStorage={dataStorage}
-          dataStorageMap={dataStorageMap}
-        >
+          onSelect={handleOnSelect}
+          onSelectMultiple={handleOnSelectMultiple}
+          isMultiple={isMultiple}>
           {itemTitle}
         </Option>
       );
@@ -113,9 +121,9 @@ const Select = (props: SelectType) => {
 
     if (selectedOptionTitle && !isMultiple) setInputValue(selectedOptionTitle);
 
-    let emptyOption = setEmptyOption();
+    let emptyOption: React.JSX.Element = setEmptyOption();
 
-    setOptions([emptyOption,...optionsList]);
+    setOptions([emptyOption, ...optionsList]);
   }
 
   const setEmptyOption = () => {
@@ -124,52 +132,60 @@ const Select = (props: SelectType) => {
         key={`emptyKey`}
         value=""
         selected={!value ? true : false}
-        onSelect={onSelectAction}
-        onSelectMultiple={onSelectMultiple}
+        onSelect={handleOnSelect}
+        onSelectMultiple={handleOnSelectMultiple}
         isMultiple={isMultiple}
-        dataStorage={dataStorage}
-        dataStorageMap={dataStorageMap}
+        storage={storage}
+        storageMap={storageMap}
       >
         {emptyTitle}
       </Option>
     );
   }
 
-  const onSelectAction = (
-    newValue: any,
-    title: string,
-    e: MouseEvent<HTMLDivElement>,
-    dataStorage: any[],
-    dataStorageMap: any[]
-  ) => {
+  const handleOnSelect = (e: MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement, Element>, params: {newValue: SelectOptionValueType, title: string | number}) => {
+
+    const {newValue, title} = params;
+    
+    //e.preventDefault();
 
     setValue(newValue);
-    setInputValue(title);
+    setInputValue(title.toString());
     setIsOpened(false);
 
     setSeekValue("");
 
-    if (props.formContext) {
-      props.formContext.setValue(name, newValue);
+    if (props.context) {
+      props.context.setValue(name, newValue);
     }
 
-    if (typeof onSelect === "function") {
-      onSelect(newValue, props.formContext, {...props}, dataStorage, dataStorageMap);
+    if (typeof onSelectCallback === "function") {
+      onSelectCallback(e, {
+        ...params,
+        storage,
+        storageMap,
+        newValue, 
+        context: props.context,
+      });
     }
 
-    //e.preventDefault();
   }
 
-  const onSelectMultiple = (newValue: any, optionProps: OptionType, e: MouseEvent<HTMLDivElement>) => {
+  const handleOnSelectMultiple = (e: MouseEvent<HTMLDivElement>, params: {newValue: SelectOptionValueType, title: string | number}) => {
+
+    const {newValue, title} = params;
 
     if (!newValue) return;
 
-    value.add(newValue);
+    if (value instanceof Set) {
+      value.add(newValue);
+    }
+
     setValue(value);
     setIsOpened(false);
 
-    if (props.formContext) {
-      props.formContext.setValue(name, Array.from(value));
+    if (props.context) {
+      props.context.setValue(name, value);//Array.from(value)
     }
 
   }
@@ -177,7 +193,7 @@ const Select = (props: SelectType) => {
   const checkIsDIsabled = () => {
     // let disabled = (props.disabled) ? true : false;
     // if (typeof props.disabled == "function" ) {
-    //   disabled = props.disabled(props.formContext);
+    //   disabled = props.disabled(props.context);
     // }
     return false;
   }
@@ -206,13 +222,14 @@ const Select = (props: SelectType) => {
     setIsInputFocus(true);
   }
 
-  const handleOnBlur = () => {
+  const handleOnBlur = (e: React.FocusEvent<HTMLInputElement, Element>): void => {
     hideDropPanel();
     if (!inputValue.length && value) {
-      onSelectAction(value, optionTitle(dataStorage[dataStorageMap[value]]), null,dataStorage, dataStorageMap );
+      handleOnSelect(e, {
+        newValue: value,
+        title: '',//storage[storageMap[value]],
+      });
       setIsInputFocus(false);
-      // console.log(dataStorage);
-      // console.log(dataStorage[dataStorageMap[value]]);
     }
   }
 
@@ -265,11 +282,11 @@ const Select = (props: SelectType) => {
     setSeekValue(e.target.value.toLowerCase());
   }
 
-  let dropStyle = {visibility: "hidden"}
-
-  if (isOpened) {
-    dropStyle = {visibility: "visible"}
-  }
+  // let dropStyle = {visibility: "hidden"}
+  //
+  // if (isOpened) {
+  //   dropStyle = {visibility: "visible"}
+  // }
 
   let reOptions = buildOptions();
 
@@ -321,14 +338,14 @@ const Select = (props: SelectType) => {
             </div>
           </span>
       </div>
-      {isMultiple &&
+      {isMultiple && value instanceof Set &&
         <SelectTags
           key={`tags__${props.name}`}
           name={`tags__${props.name}`}
-          formContext={props.formContext}
+          context={props.context}
           setTagTitle={props.setTagTitle}
-          dataStorage={dataStorage}
-          dataStorageMap={dataStorageMap}
+          storage={storage}
+          storageMap={storageMap}
           value={value}
         />
       }

@@ -31,7 +31,7 @@ class ObjectMapper {
 
   }
   
-  getValueByPath = (path: string | number, source: { [key: string | number]: any | null } | null): any | null => {
+  get = (path: string | number, source: { [key: string | number]: any | null } | null): any | null => {
 
     let pathArray = [];
     if (typeof path == "string") {

@@ -1,18 +1,19 @@
 import React, {useState, MouseEvent} from 'react'
-import {OptionType} from "../types";
+import {OptionType, SelectOptionValueType} from "../types";
 
 export type IOption = (props: OptionType) => JSX.Element;
 
 const Option: IOption = (props: OptionType) => {
 
-  const [value, setValue] = useState(props.value);
+  const [value, setValue] = useState<SelectOptionValueType>(props.value);
+  const [title] = useState(props.children);
 
   const onMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (!props.isMultiple && typeof props.onSelect == "function") {
-      props.onSelect(value, props.children, e, props.dataStorage, props.dataStorageMap);
+      props.onSelect(e, {newValue: value, title});
     } else if (props.isMultiple && typeof props.onSelectMultiple == "function") {
-      props.onSelectMultiple(value, props, e, props.dataStorage, props.dataStorageMap);
+      props.onSelectMultiple(e, {newValue: value, title});
     }
   }
 

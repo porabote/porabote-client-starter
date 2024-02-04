@@ -1,25 +1,12 @@
-import React, {useEffect} from "react";
-import {FormContextInterface} from "../FormContext";
+import React from "react";
 import SelectTag from "./SelectTag";
-
-type SelectTagsProps = {
-  name: string;
-  dataStorage: any[];
-  dataStorageMap: {};
-  value: Set<number | string>;
-  formContext: FormContextInterface;
-  setTagTitle?: (value: string | number, dataStorage: any[], dataStorageMap: {}) => string;
-};
+import {SelectTagsProps} from "../types";
 
 const SelectTags = (props: SelectTagsProps) => {
 
-  // useEffect(() => {
-  //   //console.log(props.dataStorage);
-  // }, []);
-
   const removeTag = (tagValue: number | string) => {
     props.value.delete(tagValue);
-    props.formContext.entity?.setAttribute(props.name, props.value, "replace")
+    props.context.setValue(props.name, props.value, "replace")
   }
 
   const getTags = () => {

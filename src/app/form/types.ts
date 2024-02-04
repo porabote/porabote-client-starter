@@ -1,4 +1,5 @@
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, FocusEventHandler} from "react";
+import {RecordType} from "@/services/types";
 
 export type FormContextType = {
   onSubmit: (context: FormContextType) => any;
@@ -25,7 +26,7 @@ export type ButtonPropsElementType = {
   onSubmit: (context: FormContextType) => void;
 };
 
-export type ButtonPropsType = Omit<FieldChildType<ButtonPropsElementType> & {children?: React.ReactChildren}, "name"> ;
+export type ButtonPropsType = Omit<FieldChildType<ButtonPropsElementType> & {children?: React.ReactNode}, "name"> ;
 
 export type FieldChildType<E> = {
   children?: React.ReactElement | React.ReactNode;
@@ -53,38 +54,56 @@ export type FieldChildType<E> = {
 };
 
 export type SelectType = {
+  data?: {[key: number | string]: any}[];
   buttons?: [];
   children?: React.ReactElement[];
-  dataStorage?: any[];
+  storage?: any[];
   emptyTitle?: string;
-  formContext: FormContextType;
+  context?: FormContextType;
   isEmpty?: boolean;
   isMultiple?: boolean;
   label: string;
   name: string;
-  onSelect?: (
-    newValue: any,
-    formContext: FormContextType,
-    props: SelectType,
-    dataStorage: any[],
-    dataStorageMap: any[]
-  ) => void | null | undefined;
-  optionTitle: (record: { attributes: {}, relationships: {} }) => string;
+  onSelect?: (mouseEvent: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement, Element>, params: {
+    value?: number | string | null,
+    title?: string | number,
+    storage?: any[];
+    storageMap?: {};
+    newValue: SelectOptionValueType,
+    context: FormContextType,
+  }) => void;
+  optionTitle?: (record: RecordType<any>) => string;
   optionValueKey?: string | number;
-  options: { props: OptionType }[] | [];
-  setData: () => { [key: string]: any; }[];
-  setTagTitle?: (value: number | string, dataStorage: any[], dataStorageMap: {}) => string;
-  value: string | number | number[] | Set<any> | null;
+  options?: React.JSX.Element[] | [];
+  setData?: () => { [key: string]: any; }[];
+  setTagTitle?: (value: number | string, storage: any[], storageMap: {}) => string;
+  value?: string | number | number[] | Set<any> | null;
 }
 
+export type SelectOptionValueType = string | number | any[] | Set<any> | null | boolean;
 export type OptionType = {
-  children: string;
+  children: string | number;
   selected?: boolean;
-  value: string | number;
+  value: SelectOptionValueType;
   key: number | string;
   isMultiple?: boolean;
-  onSelect?: (value: any, props: OptionType, mouseEvent: React.MouseEvent<HTMLDivElement>) => any;
-  onSelectMultiple?: (value: any, props: OptionType, mouseEvent: React.MouseEvent<HTMLDivElement>) => any;
-  dataStorage?: any[];
-  dataStorageMap?: any[];
+  onSelect?: (mouseEvent: React.MouseEvent<HTMLDivElement>, params: {
+    newValue: SelectOptionValueType;
+    title: string | number;
+  }) => any;
+  onSelectMultiple?: (mouseEvent: React.MouseEvent<HTMLDivElement>, params: {
+    newValue: SelectOptionValueType,
+    title: string | number
+  }) => any;
+  storage?: any[];
+  storageMap?: {[key: string | number | symbol]: any};
+};
+
+export type SelectTagsProps = {
+  name: string;
+  storage: any[];
+  storageMap: {[key: string | number | symbol]: any};
+  value: Set<any>;
+  context: FormContextType;
+  setTagTitle?: (value: string | number, storage: any[], storageMap: {}) => string;
 };

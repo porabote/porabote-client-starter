@@ -1,35 +1,32 @@
-import React, {MouseEventHandler} from "react";
+import React from "react";
 import {NavLink} from "react-router-dom";
-//import { check, login } from "../auth-service";
-import {
-  Form,
-  Field,
-  Input,
-  Button,
-  Select,
-  Option,
-} from "@/app/form";
+import {Form, Field, Input, Button, Select} from "@/app/form";
 import Logo from "@/resources/svg/logo.svg";
 import PasswordEyeIcon from "@/app/ui/icons/forms/PasswordEyeIcon";
 import Icon from "@/app/ui/icons";
 import {FormContextType} from "@/app/form/types";
+import Api from "@/services";
+import {AUTH_URL} from "@/configs";
 
-const LoginForm = (props: {}) => {
+const LoginForm = () => {
 
   const initValues = {
     password: "z7893727",
-    client_id: "3",
+    username: "maksimov_den@mail.ru",
   };
 
-  const login = (context: FormContextType): void => {
-    console.log(context.values);
+  const login = async (context: FormContextType): Promise<any> => {
+    const res = await Api.post('/auth/login', {...context.values}, {
+      url: AUTH_URL,
+    });
+
   }
 
   return (
     <div className="box login" style={{width: '360px', margin: '0 auto'}}>
 
       <div style={{display: 'flex', padding: '30px 15px 10px 15px'}}>
-        <img style={{width: "110px"}} src={Logo}/>
+        <img alt="Bourlesque" style={{width: "110px"}} src={Logo}/>
       </div>
 
       <div className="box-body">
@@ -65,17 +62,8 @@ const LoginForm = (props: {}) => {
           <Field>
             <Select
               label="Аккаунт"
+              data={[{name: 'Россия', id: 1}, {name: 'Армения', id: 2}]}
               name="account_id">
-              {
-                [{name: 'test1', id: 1}, {name: 'test2', id: 2}].map((datum, index) => {
-                  console.log(datum);
-                  return (
-                    <Option value={datum.id} key={index}>
-                      {datum.name}
-                    </Option>
-                  )
-                })
-              }
             </Select>
           </Field>
 

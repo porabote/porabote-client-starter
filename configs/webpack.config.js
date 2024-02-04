@@ -132,6 +132,10 @@ module.exports = (webpackEnv) => {
         //   key: configs.certKey,
         // }
       },
+      'https': {
+        cert: configs.certPath,
+        key: configs.certKey,
+      },
       // cert: configs.certPath,
       // key: configs.certKey,
       // writeToDisk: false,
