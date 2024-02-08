@@ -1,0 +1,11 @@
+{
+  "name": "auth-server",
+  "version": "1.0.0",
+  "description": "Auth server porabote",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Maksimov Denis",
+  "dependencies": {
+    "cookie-parser": "^1.4.6"
+  }
+}

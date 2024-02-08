@@ -6,7 +6,7 @@ import PasswordEyeIcon from "@/app/ui/icons/forms/PasswordEyeIcon";
 import Icon from "@/app/ui/icons";
 import {FormContextType} from "@/app/form/types";
 import Api from "@/services";
-import {AUTH_URL} from "@/configs";
+import {AUTH_URL, APP_DOMAIN_BASE} from "@/configs";
 
 const LoginForm = () => {
 
@@ -15,10 +15,28 @@ const LoginForm = () => {
     username: "maksimov_den@mail.ru",
   };
 
-  const login = async (context: FormContextType): Promise<any> => {
-    const res = await Api.post('/auth/login', {...context.values}, {
+  const signIn = async (context: FormContextType): Promise<any> => {
+    const res = await Api.post('/auth/signIn', {...context.values}, {
       url: AUTH_URL,
     });
+
+    // if (res.error) {
+    //   alert(res.error);
+    //   return;
+    // }
+
+    const {accessToken, refreshToken} = res.data;
+    // console.log(res);
+    // console.log(refreshToken);
+
+    const resRT = await Api.auth('/auth/refreshToken', {refreshToken}, {
+      url: `https://${APP_DOMAIN_BASE}:7000`,
+      credentials: "omit",
+    });
+    console.log(resRT);
+    // document.body.appendChild({refreshToken});
+    //
+    // const map = window.open(`https://${APP_DOMAIN_BASE}:7000`, "Map", "status=0,title=0,height=600,width=800,scrollbars=1");
 
   }
 
@@ -31,7 +49,7 @@ const LoginForm = () => {
 
       <div className="box-body">
         <Form
-          onSubmit={login}
+          onSubmit={signIn}
           initValues={initValues}>
           <Field>
             <Input placeholder="email" label="Электронная почта" name="username"/>

@@ -54,6 +54,8 @@ const Api = () => {
 
     const url = (typeof params.url !== "undefined") ? params.url : API_URL;
 
+    const credentials = (params.credentials) ? params.credentials : 'omit';
+
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Access-Control-Allow-Credentials', 'false');
     requestHeaders.set('Authorization', `bearer ${getToken()}`);
@@ -79,7 +81,44 @@ const Api = () => {
       method: "POST",
       mode: "cors",
       cache: "no-cache",
-      credentials: "omit",
+      credentials,
+      headers: requestHeaders,
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body,
+    });
+
+    const responseJSON = await response.json();
+    return { ...responseJSON, ...{ response: { status: response.status } } };
+  }
+
+
+  const auth = async (
+    uri: string,
+    data?: {[key: string]: any} | FormData,
+    params: ApiGetType = {url: API_URL, headers: {}}
+  ) => {
+
+    const url = (typeof params.url !== "undefined") ? params.url : API_URL;
+
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Access-Control-Allow-Credentials', 'true');
+    requestHeaders.set('Accept', 'application/json');
+
+    let body;
+    // Excluding Content type for correctly binding of data
+    if (data instanceof FormData) {
+      body = data;
+    } else {
+      requestHeaders.set('Content-Type', 'application/json;charset=UTF-8');
+      body = JSON.stringify(data);
+    }
+
+    const response = await fetch(`${url}${uri}`, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "include",
       headers: requestHeaders,
       redirect: "follow",
       referrerPolicy: "no-referrer",
@@ -138,7 +177,7 @@ const Api = () => {
     return accessToken;
   }
 
-  return {get, post };
+  return {get, post, auth };
 
 }
 
