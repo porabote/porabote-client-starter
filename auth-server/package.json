@@ -4,8 +4,17 @@
   "description": "Auth server porabote",
   "main": "index.js",
   "license": "MIT",
-  "author": "Maksimov Denis",
+  "author": "Denis Maksimov",
+  "keywords": [
+    "porabote"
+  ],
+  "scripts": {
+    "start-dev": "NODE_ENV=dev node index.js",
+    "start": "NODE_ENV=prod node index.js"
+  },
   "dependencies": {
-    "cookie-parser": "^1.4.6"
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   }
 }

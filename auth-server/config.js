@@ -1,10 +1,10 @@
 console.log(process.env.NODE_ENV);
 
 const config = {
-  PORT: 7000,
-  HOST: 'cp.passmen.ae',
+  SERVER_HOST: 'cp.passmen.ae',
   CLIENT_HOST: 'cp.passmen.ae',
-  CLIENT_PORT: process.env.NODE_ENV === 'production' ? 443 : 5000,
+  SERVER_PORT: process.env.NODE_ENV === 'development' ? '8000' : '7000',
+  CLIENT_PORT: process.env.NODE_ENV === 'development' ? '3000' : null,
 };
 
 module.exports = config;
