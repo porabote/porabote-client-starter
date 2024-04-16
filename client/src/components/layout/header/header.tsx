@@ -1,22 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {NavLink} from "react-router-dom";
 import Navbar from "./navbar";
 import TreeMapper from "@app/collections/TreeMapper";
 import Api from "@/services";
 import Logo from "@/resources/svg/logo.svg";
-import BarsIcon from "@/app/ui/icons/base/BarsIcon";
-import {useAppSelector} from "@app/hooks/hooks";
 import TopBarIcons from "@/components/layout/header/top-bar-icons";
 import Profile from "@/components/layout/header/profile";
-import Icon from "@app/ui/icons";
-
-type authProps = {
-  isAuth: boolean;
-};
+import {AuthContext} from "@app/auth-wrapper";
 
 const Header = () => {
 
-  const {isAuth, user} = useAppSelector(state => state.auth);
+  const {isAuth, user} = useContext(AuthContext);
 
   const [menuTree, setMenuTree] = useState({});
   const [perms, setPerms] = useState({
@@ -46,9 +40,9 @@ const Header = () => {
 
         {isAuth &&
           <React.Fragment>
-            <NavLink className="header-panel__logo" to={"/"}>
-              <img style={{width: "90px"}} src={Logo}/>
-            </NavLink>
+            {/*<NavLink className="header-panel__logo" to={"/"}>*/}
+            {/*  <img style={{width: "90px"}} src={Logo}/>*/}
+            {/*</NavLink>*/}
             <Navbar data={menuTree}/>
             <TopBarIcons/>
           </React.Fragment>

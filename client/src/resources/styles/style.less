@@ -373,7 +373,7 @@ body {
   display: grid;
   grid-area: header;
   grid-template-areas:
-      "head-logo head-profile"
+      "navbar head-profile"
       "navbar navbar";
   grid-template-columns: 1fr 150px;
   min-height: 84px;
@@ -382,6 +382,65 @@ body {
 
 // ...Верхняя панель
 
+.navbar-top {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-start;
+  padding-left: 24px;
+}
+
+.navbar-top {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: flex-start;
+}
+
+.navbar-top_item {
+  position: relative;
+  margin-right: 26px;
+  color: #333333;
+  padding: 10px 0;
+}
+
+.navbar-top_item-link {
+  display: flex;
+}
+
+.navbar-top_item .icon-prb {
+  position: relative;
+  top: 2px;
+  padding-left: 4px;
+}
+
+.navbar-top-sub {
+  display: none;
+  position: absolute;
+  top: 42px;
+  left: -10px;
+  z-index: 1000;
+  width: 200px;
+  background: #FAFAFC;
+  border-radius: 12px;
+}
+.navbar-top-sub.active {
+  display: block;
+}
+
+.navbar-top-sub_item {
+  display: block;
+  padding: 10px 20px;
+  font-size: 0.9em;
+}
+.navbar-top-sub_item:first-child, .navbar-top-sub_item:last-child {
+  padding: 15px 20px;
+  border-radius: 12px;
+}
+
+.navbar-top-sub_item:hover {
+  background: #ebebee;
+}
 
 
 // Логотип
@@ -422,8 +481,6 @@ body {
   padding: 10px 6px;
   cursor: pointer;
 }
-.header-panel__top-bar-icons__item__link:hover {
-}
 .header-panel__top-bar-icons__item__link:hover .header-panel__top-bar-icons__item__link_img {
   color: #fff;
   transform: scaleX(-1);
@@ -440,21 +497,12 @@ body {
 }
 
 .header-panel__top-bar-icons__item__link_text {
-  font-family: 'Roboto Regular';
+  font-family: 'Roboto Regular', serif;
   font-size: 12px;
   text-align: center;
   display: block;
   text-transform: lowercase;
 }
-
-//.header-panel__top-bar-icons__item__link_text { background-position: 50% 2px;background-repeat: no-repeat; }
-//.header-panel__top-bar-icons__item__link_text.chat { background-image: url('./Svg/speech-bubble.Svg'); background-size: 22px; padding: 26px 0 2px 0px;width: 39px; color: #666;}
-//.header-panel__top-bar-icons__item__link_text.chat:hover { background-image: url('./Svg/speech-bubble__blue.Svg');}
-//
-//.header-panel__top-bar-icons__item__link_text.alarm_clock { background-image: url('./Svg/alarm-clock.Svg'); background-size: 22px; padding: 26px 0 2px 0;width: 36px; color: #666; }
-//.header-panel__top-bar-icons__item__link_text.alarm_clock:hover { background-image: url('./Svg/alarm-clock__blue.Svg'); }
-//
-//.header-panel__top-bar-icons__item__link_text.notification { background-image: url('./Svg/bell.Svg'); background-size: 24px; padding: 26px 0 2px 0;width: 40px; }
 
 .header-panel__top-bar-icons__item__link .count {
   position: absolute;
@@ -485,14 +533,6 @@ body {
   cursor: pointer;
 }
 
-//.tools__item__icon.set_scalar_view { background-image: url('./Svg/tools__set_scalar_view__grey.Svg'); }
-//.tools__item__icon.set_scalar_view:hover { background-image: url('./Svg/tools__set_scalar_view__black.Svg'); }
-//.tools__item__icon.set_scalar_view.active { background-image: url('./Svg/tools__set_scalar_view__blue.Svg'); }
-//
-//.tools__item__icon.set_grid_view { background-image: url('./Svg/tools__set_grid_view__grey.Svg'); }
-//.tools__item__icon.set_grid_view:hover { background-image: url('./Svg/tools__set_grid_view__black.Svg'); }
-//.tools__item__icon.set_grid_view.active { background-image: url('./Svg/tools__set_grid_view__blue.Svg'); }
-
 // ..Панель настроек
 
 // MEDIA
@@ -500,7 +540,7 @@ body {
 @media only screen and (min-width: 375px) {
 
   .header-panel {
-    grid-template-columns: 1fr 1fr 90px;
+    grid-template-columns: 40px 1fr 1fr 90px;
     grid-template-areas:
           "head-logo head-icons head-profile"
           "navbar navbar navbar";
@@ -512,10 +552,9 @@ body {
 @media only screen and (min-width: 1280px) {
   .header-panel {
     display: grid;
-    grid-template-columns: 1fr 1fr 270px;
-    grid-template-columns: 140px 4fr 70px 270px;
+    grid-template-columns: 40px 4fr 70px 270px;
     grid-template-areas:
-          "head-logo navbar head-icons head-profile";
+          "navbar head-icons head-profile";
   }
 
   .main-page {
@@ -545,7 +584,7 @@ body {
 
   .header-panel {
     align-content: center;
-    grid-template-columns: 1fr 1fr 300px;
+    grid-template-columns: 40px 1fr 300px;
     grid-template-areas:
           "head-logo head-icons head-profile"
           "navbar navbar navbar";
@@ -570,7 +609,6 @@ body {
     grid-template-columns: 400px 1fr 400px;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
-    font-family: 'Museo Regular';
     font-size: 14px;
     padding-bottom: 10px;
     margin: 0;
@@ -592,7 +630,7 @@ body {
 
 @media only screen and (min-width: 1280px) {
   .header-panel {
-    grid-template-columns: 250px 3fr 70px fit-content(80%);
+    grid-template-columns: 50px 3fr 70px fit-content(80%);
     grid-template-areas:
           "head-logo navbar head-icons head-profile";
   }
@@ -649,6 +687,13 @@ body {
 .navbar-left_panel__item:hover {
   background: #FAFAFC;
   color: #101326FF;
+}
+.navbar-left_panel__item a {
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-flow: column;
 }
 
 .content {
@@ -903,4 +948,179 @@ body {
   height: 12px;
   background: #00bd7d;
   border-radius: 50%;
+}
+
+.feed_page {
+  border: 1px solid #f8f8f8;
+  padding: 20px 40px;
+  margin: 10px;
+}
+
+.prb-row.feed {
+  font-size: 1em;
+}
+.prb-row.feed .prb-table__cell {
+  padding: 10px;
+}
+
+.feed_page__plus {
+  cursor: pointer;
+}
+
+.feed_page__search-panel {
+  padding: 0 0 20px 0;
+}
+.feed_page__title {
+  padding-bottom: 20px;
+}
+.feed_page__top-panel {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px;
+}
+.feed_page__plus {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+.feed_page__plus .icon-prb {
+  margin-right: 3px;
+}
+
+
+.record_page {
+  border: 1px solid #f8f8f8;
+  padding: 10px 40px 40px 40px;
+  margin: 10px;
+}
+.record_page_title {
+  margin-top: 20px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  font-family: "Roboto Medium", sans-serif;
+}
+.record_page_title_icon {
+  background: #fafafa;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  margin-right: 14px;
+}
+.record_page_title_icon:hover {
+  background: #efefef;
+}
+
+.error-page {
+  width: 400px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  flex-flow: column;
+  margin: 0 auto;
+}
+
+.feed_page__title-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #262632;
+  font-family: "Roboto Regular", serif;
+}
+
+.feed_page__title-toggle.active {
+  color: #346BF6;
+  font-family: "Roboto Medium", serif;
+}
+
+.feed_page_filter-wrap {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  opacity: 0;
+  border: 1px solid #f0f1f4;
+  border-radius: 25px;
+  padding: 0;
+  margin: 0 0 20px 0;
+  background-image: linear-gradient(rgb(240, 241, 244, 90), rgb(240, 241, 244, 50));
+  height: 0;
+  transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+.feed_page_filter-wrap.active {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+  padding: 10px 20px 20px 20px;
+}
+
+.feed_page_filter-wrap__fieldset {
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  grid-gap: 20px;
+}
+
+
+.feed_page_filter-wrap .form_item__label {
+  color: #14141a;
+  font-family: "Roboto Regular", serif;
+  padding-bottom: 4px;
+  font-size: 0.9em;
+}
+.filter__date-between-block {
+  display: flex;
+  gap: 6px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.lazy-load__info {
+  padding: 0 10px 10px 10px;
+  font-size: 0.9em;
+  color: #6c7077;
+  text-align: right;
+}
+
+.button_lazy-load {
+  color: #979ca4;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+}
+.button_lazy-load:hover {
+  color: #232a36;
+}
+.button_lazy-load__digital {
+  font-family: "Roboto Medium", sans-serif;
+  color: #232a36;
+}
+
+.button_lazy-load.non-active {
+  display: none;
+}
+.admin_user_access_list_nav_root {
+  padding: 10px 20px;
+  border: 1px solid #eeeded;
+  margin: 20px 0;
+}
+.admin_user_access_list_nav_root .form-item__checkbox-wrap {
+  padding: 6px 0;
+}
+
+.admin_user_access_list_nav_child {
+  padding: 0 25px;
+}
+.admin_user_access_list_nav_child .form-item__checkbox-wrap {
+  padding: 6px 0;
 }

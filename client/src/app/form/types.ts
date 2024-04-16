@@ -77,6 +77,7 @@ export type SelectType = {
   isMultiple?: boolean;
   label: string;
   name: string;
+  classModifier?: string;
   onSelect?: (mouseEvent: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement, Element>, params: {
     value?: number | string | null,
     title?: string | number,

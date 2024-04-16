@@ -13,6 +13,7 @@ import "./assets/form.less";
 import "./assets/input.less";
 import "./assets/buttons.less";
 import "./assets/select.less";
+import "./assets/checkbox.less";
 
 export {
   FormContext,

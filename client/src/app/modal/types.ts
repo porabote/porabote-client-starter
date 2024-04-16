@@ -4,7 +4,7 @@ export type modalItemProps = {
   itemkey: number;
   activeItemKey: number;
   key: number,
-  title: string;
+  title?: string;
   content: ReactElement<any>;
 };
 

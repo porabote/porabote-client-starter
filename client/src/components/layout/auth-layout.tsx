@@ -1,10 +1,9 @@
 import React, {useContext, useEffect} from 'react';
-import SigninForm from "@/app/auth/templates/signin-form";
+import SigninForm from "@/components/auth/templates/signin-form";
 import Modal from "@/app/modal";
 import Balloon from "@/app/balloon/balloon";
 import {ThemeContext} from "@/app/themes/theme-wrapper";
-import AuthService from "../../app/auth/auth-service";
-import {AuthContext} from "../../app/auth/auth-wrapper";
+import {AuthContext} from "@/app/auth-wrapper";
 import {Outlet, useNavigate, useRoutes} from "react-router-dom";
 import {useLocation} from "react-router";
 
@@ -22,7 +21,9 @@ const AuthLayout = () => {
 
   useEffect(() => {
     if (isAuth) {
-      navigate('/');
+      if (location.pathname == '/auth/signIn') {
+        navigate('/');
+      }
     }
   });
 

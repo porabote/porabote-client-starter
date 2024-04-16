@@ -1,10 +1,10 @@
 import {ApiGetType, FetchParamsType} from "@/services/types";
 import {API_URL, API_VERSION, API_CLIENT_ID} from "@/configs";
-import AuthService from "@app/auth/auth-service";
+import LocalStorageService from "@/app/local-storage/local-storage-service";
 
 const Api = () => {
 
-  const get = async (uri: string, data: { [key: string]: any }, params: ApiGetType = {}) => {
+  const get = async (uri: string, data?: { [key: string]: any }, params?: ApiGetType = {}) => {
 
     params = Object.assign(
       {url: API_URL, headers: {}},
@@ -133,7 +133,7 @@ const Api = () => {
   const setHeaders = (customHeaders?: { [key: string]: string }) => {
     const requestHeaders = new Headers();
     requestHeaders.set('Access-Control-Allow-Credentials', 'false');
-    requestHeaders.set('Authorization', `bearer ${AuthService.getToken()}`);
+    requestHeaders.set('Authorization', `bearer ${LocalStorageService.getAccessToken()}`);
     requestHeaders.set('Accept', 'application/json, text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8');
     requestHeaders.set('Content-Type', `application/json, text/html;charset=UTF-8`);
     requestHeaders.set('ClientId', `${API_CLIENT_ID}`);

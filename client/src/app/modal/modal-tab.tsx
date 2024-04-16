@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {closeAction, setActiveItem} from "./redux-store/actions";
 import {useDispatch} from "react-redux";
+import {ModalContext} from "./modal-wrapper";
 
 export type modalTabProps = {
   itemkey: number;
@@ -10,13 +11,13 @@ export type modalTabProps = {
 
 const ModalTab = (props: modalTabProps) => {
 
-  const dispatch = useDispatch();
+  const {activeTabKey, closeModal, setActiveTab} = useContext(ModalContext);
 
   return (
-    <div className={props.activeItemKey == props.itemkey ? "modal-tabs-item active" : "modal-tabs-item"}>
+    <div className={activeTabKey == props.itemkey ? "modal-tabs-item active" : "modal-tabs-item"}>
           <span
             className="modal-tabs-item__link"
-            onClick={() => setActiveItem(dispatch, props.itemkey)}
+            onClick={() => setActiveTab(props.itemkey)}
           >
             {props.title}
           </span>
@@ -24,7 +25,7 @@ const ModalTab = (props: modalTabProps) => {
         className="modal-tabs-item__close modal-close"
         item-key={props.itemkey}
         onClick={() => {
-          closeAction(dispatch)
+          closeModal(props.itemkey)
         }}
       >
         </span>

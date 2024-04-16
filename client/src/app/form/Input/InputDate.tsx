@@ -24,7 +24,7 @@ const InputDate = (props: FieldChildType<any>) => {
     setStartDate(date);
 
     if (typeof props.onSelect == "function") {
-      props.onSelect(date, {context, ...props});
+      props.onSelect({context, ...props, newValue: date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : null});
     }
   }
 
@@ -47,13 +47,14 @@ const InputDate = (props: FieldChildType<any>) => {
   return (
     <div>
 
-      <div className="form_item">
+      <div className={`form_item ${props.classModifier ? props.classModifier : ''}`}>
         <label className="form_item__label">{props.label}</label>
 
         <DatePicker
           format="dd.MM.yy"
           selected={setStartHandler}
           value={startDate}
+          allowClear={props.allowClear ? props.allowClear : false}
           disableCalendar={props.disableCalendar || false}
           onChange={onChangeHandler}
           isClearable

@@ -4,7 +4,8 @@ import {BalloonMessageType} from "@app/balloon/types";
 
 const initValues = {
   msgs: [],
-  closeMsg: (unique: number) => {}
+  closeMsg: (unique: number) => {},
+  showMsg: () => {},
 };
 
 export const BalloonContext = createContext(initValues);
@@ -27,10 +28,9 @@ const AuthWrapper = (props: { children: React.ReactNode }) => {
   const closeMsg = (key: number) => {
 
     let msgsNew = msgs.filter((item: BalloonMessageType) => {
-      console.log(item.unique, key);
       return item.unique === key ? false : true;
     });
-console.log(msgsNew);
+
     setMsgs([...msgsNew]);
   }
 

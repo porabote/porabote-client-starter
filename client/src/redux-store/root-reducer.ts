@@ -1,8 +1,7 @@
-import authReducer from "@app/auth/redux-store/auth-reducer";
 import modalReducer from "@/app/modal/redux-store/reducer";
 
 const staticReducers = {
-  auth: authReducer,
+  //auth: authReducer,
   modal: modalReducer,
 };
 

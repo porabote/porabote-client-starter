@@ -44,7 +44,10 @@ class FormSchema {
   }
 
   setButtons = (buttons: FieldType<any>[]) => {
+
     buttons.forEach(buttonProps => {
+
+      this.buttons = [];
 
       buttonProps.placeholder = buttonProps.placeholder ? buttonProps.placeholder[this.lang] : "";
       buttonProps.label = buttonProps.label ? buttonProps.label[this.lang] : "";

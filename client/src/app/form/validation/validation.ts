@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {FormContextType} from "../types";
-import {AuthContext} from "../../auth/auth-wrapper";
+import {AuthContext} from "../../__auth/auth-wrapper";
 import {SettingsContext} from "../../settings/settings";
 
 const Validation = (formContext: FormContextType) => {

@@ -1,12 +1,12 @@
 import React, {useContext} from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import LogoutIcon from "@/app/ui/icons/header-profile/LogoutIcon";
-import {AuthUserType} from "@app/auth/types";
 import Icon, {UserIcon} from "@app/ui/icons";
 import ProfileIcon from "@app/ui/icons/header-profile/ProfileIcon";
 import AccessListIcon from "@app/ui/icons/header-profile/AccessListIcon";
 import ConfigIcon from "@app/ui/icons/header-profile/ConfigIcon";
-import {AuthContext} from "../../../app/auth/auth-wrapper";
+import {AuthContext} from "@/app/auth-wrapper";
+import {AuthUserType} from "@/app/auth-wrapper/types";
 
 type ProfileType = {
   isAuth: boolean;
@@ -17,10 +17,14 @@ type ProfileType = {
 const ProfileMenu = (props: ProfileType) => {
 
   const {signOut} = useContext(AuthContext);
+  const navigate = useNavigate();
   const {user} = props;
 
   const signOutHandler = () => {
-    signOut();
+    const callback = () => {
+      navigate("/auth/signIn");
+    }
+    signOut(callback);
   };
 
   const settingStyle = {
@@ -72,12 +76,14 @@ const ProfileMenu = (props: ProfileType) => {
       </div>
 
 
-      {/*<div className="header-panel__profile__dropdown__item">*/}
-      {/*  <GroupIcon style={settingStyle}/>*/}
-      {/*  <NavLink to="/users/feed/" className="header-panel__profile__dropdown__item__divnk profil">*/}
-      {/*    Пользователи*/}
-      {/*  </NavLink>*/}
-      {/*</div>*/}
+      {user.is_su &&
+        <div className="header-panel__profile__dropdown__item">
+          <Icon><ProfileIcon/></Icon>
+          <NavLink to="/admin/users" className="header-panel__profile__dropdown__item__divnk profil">
+            Пользователи
+          </NavLink>
+        </div>
+      }
 
 
       <div className="header-panel__profile__dropdown__separator"></div>
@@ -85,7 +91,7 @@ const ProfileMenu = (props: ProfileType) => {
         <Icon size={18}>
           <LogoutIcon/>
         </Icon>
-        <div onClick={signOut} className="header-panel__profile__dropdown__item__divnk exit">
+        <div onClick={signOutHandler} className="header-panel__profile__dropdown__item__divnk exit">
           Выйти
         </div>
       </div>

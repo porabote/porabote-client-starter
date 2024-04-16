@@ -3,6 +3,7 @@ export type ApiGetType = {
   query?: any[];
   headers?: { [key: string]: string };
   credentials?: 'omit' | 'same-origin' | 'include';
+  isBlob: boolean;
 }
 
 export type ResponseMetaType = {

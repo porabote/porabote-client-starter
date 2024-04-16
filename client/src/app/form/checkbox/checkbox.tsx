@@ -1,6 +1,6 @@
-import React, {MouseEventHandler, useState, useEffect} from 'react';
+import React, {MouseEventHandler, useState, useEffect, useContext} from 'react';
 import {FieldChildType} from "../types";
-import "./checkbox.less";
+import {FormContext} from "../form";
 
 type CheckBoxType = {
 
@@ -8,14 +8,16 @@ type CheckBoxType = {
 
 const Checkbox = (props: FieldChildType<CheckBoxType>) => {
 
-  const [isChecked, setIsChecked] = useState(props.value ? true : false);
+  const context = useContext(FormContext);
+
+  const [isChecked, setIsChecked] = useState(context.getValue(props.name) ? true : false);
   const [htmlFor, setHtmlFor] = useState(`checkbox-${Math.random()}`);
-  const [value, setValue] = useState(props.value || "");
+  const [value, setValue] = useState(context.getValue(props.name) || "");
 
   useEffect(() => {
 
     if (props.value != value) {
-      changeStatus(!!props.value, null);
+      changeStatus(!!context.getValue(props.name), null);
     }
   }, [props.value]);//props.value
 
@@ -38,8 +40,8 @@ const Checkbox = (props: FieldChildType<CheckBoxType>) => {
 
     setIsChecked(newStatus ? true : false);
 
-    if (props.formContext) {
-      props.formContext.setValue(props.name, newStatus);
+    if (context) {
+      context.setValue(props.name, newStatus);
     }
 
     setValue(newStatus);
@@ -76,6 +78,9 @@ const Checkbox = (props: FieldChildType<CheckBoxType>) => {
           }
         }}
         onChange={e => {
+          if (typeof props.onChange == "function") {
+            props.onChange(e, props);
+          }
           //let status = (e.target.checked) ? 1 : 0
         }}
       />

@@ -6,6 +6,7 @@ const FormSchemaButtons = () => {
   const {schema} = useContext(FormContext);
 
   const render = () => {
+
     let buttons = [];
     schema.getButtons().forEach((button) => {
       buttons.push(button);

@@ -1,6 +1,6 @@
 .light-theme {
   --selectFontColor: #000000;
-  --selectBackgroundColorHover: #333333;
+  --selectBackgroundColorHover: #f1f0f0;
   --selectBackgroundColor: #FFFFFF;
   --selectBorder: 1px solid #e3e3e3;
   --selectBorderRadius: 0;
@@ -124,9 +124,9 @@ div.form-item__select-custom__input {
 
 .form-item__select__drop-blok {
   position : absolute;
-  left: 0px;
+  left: -1px;
   top: -6px;
-  background: var(--selectBackgroundColor);
+  background: #ffffff;
   border: var(--selectBorder);
   border-radius: var(--selectBorderRadius);
   box-shadow: var(--selectDropBoxShadow);
@@ -137,6 +137,7 @@ div.form-item__select-custom__input {
   overflow: scroll;
   width: 100%;
   font-family: Helvetica, Sans-Serif, serif;
+  z-index: 1000;
 }
 
 .form-item__select__drop-blok span {

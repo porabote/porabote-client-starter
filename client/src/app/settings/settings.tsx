@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import {AuthContext} from "../auth/auth-wrapper";
+import {AuthContext} from "@app/__auth/auth-wrapper";
 
 type SettingsPropsType = {
   children: React.ReactNode;

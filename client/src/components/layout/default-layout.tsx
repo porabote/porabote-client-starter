@@ -4,20 +4,21 @@ import Header from "./header";
 import Navbar from "./elements/navbar";
 import Modal from "@/app/modal";
 import Balloon from "@/app/balloon/balloon";
-import {AuthContext} from "@/app/auth/auth-wrapper";
-import AuthLayout from "./auth-layout";
+import {AuthContext} from "@/app/auth-wrapper";
 import {ThemeContext} from "@/app/themes/theme-wrapper";
-import "@/resources/styles/style.less"
+import "@/resources/styles/style.less";
+import "@/resources/styles/form-modifier.less";
+import "@/resources/styles/style-modifier.less";
 
 const DefaultLayout = () => {
 
   const navigate = useNavigate();
-  const {isAuth} = useContext(AuthContext);
+  const {isAuth, isAuthInited} = useContext(AuthContext);
   const {theme} = useContext(ThemeContext);
 
   useEffect(() => {
-    if (!isAuth) {
-      navigate('/auth/signIn', { replace: true });
+    if (!isAuth && isAuthInited) {
+      navigate('/auth/signIn', {replace: true});
     }
   }, [isAuth]);
 
@@ -36,8 +37,7 @@ const DefaultLayout = () => {
       <Balloon/>
 
     </div>
-  )
-    ;
+  );
 };
 
 export default DefaultLayout;

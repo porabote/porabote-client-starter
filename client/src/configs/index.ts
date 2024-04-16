@@ -1,10 +1,13 @@
-const APP_DOMAIN_BASE = "cp.passmen.ae";
-const API_URL = "https://api.passmen.ae/api";
-const API_VERSION = 1;
-const API_CLIENT_ID = 4;
-const FILES_URL = "https://api.passmen.ae/files";
-const AUTH_URL = "https://api.passmen.ae/api/auth";
-const CHAT_DOMAIN = "wss://passmen.ae";
-const CHAT_PORT = "4000";
+export const APP_DOMAIN_BASE = "cp.passmen.ae";
+export const API_URL = "https://api.passmen.ae/api";
+export const API_VERSION = 1;
+export const API_CLIENT_ID = 1;
+export const FILES_URL = "https://api.passmen.ae/files";
+export const AUTH_URL = "https://api.passmen.ae/api/auth";
+export const CHAT_DOMAIN = "wss://passmen.ae";
+export const CHAT_PORT = "4000";
 
-export { APP_DOMAIN_BASE, API_URL, API_VERSION, AUTH_URL, FILES_URL, CHAT_DOMAIN, CHAT_PORT, API_CLIENT_ID };
+export const LOGIN_ACTION = "/auth/login";
+export const SIGNIN_API_URL = "/api/users/method/login";
+export const LOGOUT_ACTION = "/auth/logout";
+export const LOGOUT_API_URL = "/api/users/method/logout";

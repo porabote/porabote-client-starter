@@ -35,9 +35,12 @@ const Navbar = () => {
           </Icon> AD
         </div>
         <div className="navbar-left_panel__item">
-          <Icon size={20} fill="#3D3D3D" fillHover="#101326FF">
-            <ClubIcon/>
-          </Icon> Passmen
+          <NavLink to="/guests">
+            <Icon size={20} fill="#3D3D3D" fillHover="#101326FF">
+              <ClubIcon/>
+            </Icon>
+            Passmen
+          </NavLink>
         </div>
         <div className="navbar-left_panel__item">
           <NavLink to="/stats/yandex">

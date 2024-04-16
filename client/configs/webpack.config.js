@@ -24,6 +24,11 @@ module.exports = (webpackEnv) => {
       filename: "[name].[fullhash].bundle.js",
       publicPath: (isEnvProduction) ? "/" : "/",
     },
+    watchOptions: {
+      ignored: ['**/node_modules'],
+      aggregateTimeout: 600,
+      poll: 1000,
+    },
     resolve: {
       extensions: [".js", ".ts", ".jsx", ".tsx", ".ttf"],
       alias: {
@@ -41,14 +46,20 @@ module.exports = (webpackEnv) => {
     },
     snapshot: {
       managedPaths: [
-        path.resolve(__dirname, "../node_modules/porabote"),
+        //path.resolve(__dirname, "../node_modules/porabote"),
       ]
     },
     module: {
       rules: [
         {
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
-          exclude: /(node_modules\/[^porabote]|bower_components)/,
+          test: /\.([cm]?ts|tsx)$/,
+          loader: "ts-loader",
+          options: {transpileOnly: true},
+          exclude: /node_modules/,
+        },
+        {
+          test: /\.(js|mjs|jsx)$/,
+          exclude: /node_modules/,
           include: [
             // path.resolve(__dirname, "../node_modules/porabote"),
             path.resolve(__dirname, "../src"),

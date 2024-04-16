@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {useSelector} from "react-redux";
 import {redirect, Route} from "react-router-dom";
-import {LOGIN_ACTION} from "@app/auth/constants";
+import {LOGIN_ACTION} from "../__auth/constants";
 
 export type {IMatch} from "@app/types/ts-react-types";
 

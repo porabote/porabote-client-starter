@@ -183,7 +183,10 @@ const Select = (props: SelectType) => {
     );
   }
 
-  const handleOnSelect = (e: MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement, Element>, params: {newValue: SelectOptionValueType, title: string | number}) => {
+  const handleOnSelect = (e: MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLInputElement, Element>, params: {
+    newValue: SelectOptionValueType,
+    title: string | number
+  }) => {
 
     const {newValue, title} = params;
 
@@ -202,14 +205,17 @@ const Select = (props: SelectType) => {
         ...params,
         storage,
         storageMap,
-        newValue, 
+        newValue,
         context: context,
       });
     }
 
   }
 
-  const handleOnSelectMultiple = (e: MouseEvent<HTMLDivElement>, params: {newValue: SelectOptionValueType, title: string | number}) => {
+  const handleOnSelectMultiple = (e: MouseEvent<HTMLDivElement>, params: {
+    newValue: SelectOptionValueType,
+    title: string | number
+  }) => {
 
     const {newValue, title} = params;
 
@@ -331,7 +337,7 @@ const Select = (props: SelectType) => {
   const errors = context.validationErrors[props.name];
 
   return (
-    <div className="form-item flex no_padding">
+    <div className={`form-item ${props.classModifier ? props.classModifier : ''}`}>
       {props.label &&
         <label className="form_item__label">{props.label}</label>
       }
@@ -355,27 +361,28 @@ const Select = (props: SelectType) => {
             }
 
             {inputElement == 'div' &&
-              <div style={{cursor: "pointer"}}
-                ref={textInput}
-                className="form-item__select-custom__input"
-                onChange={onChangeInput}
-                onMouseDown={(e) => {
-                  if (isDisabled) return;
-                  e.preventDefault();
-                  toggleDropList()
-                }}
-              >{(inputValue) ? inputValue : (isInputFocus) ? inputValue : emptyTitle}</div>
+              <input readOnly={true} style={{cursor: "pointer"}}
+                     ref={textInput}
+                     className="form-item__select-custom__input"
+                     onChange={onChangeInput}
+                     onMouseDown={(e) => {
+                       if (isDisabled) return;
+                       e.preventDefault();
+                       toggleDropList()
+                     }}
+                     value={((inputValue) ? inputValue : (isInputFocus) ? inputValue : emptyTitle) || ""}
+              />
             }
 
-              <span
-                ref={toggle}
-                className="form-item__select-custom__toggle"
-                onMouseDown={(e) => {
-                  if (isDisabled) return;
-                  e.preventDefault();
-                  toggleDropList()
-                }}
-              >
+            <span
+              ref={toggle}
+              className="form-item__select-custom__toggle"
+              onMouseDown={(e) => {
+                if (isDisabled) return;
+                e.preventDefault();
+                toggleDropList()
+              }}
+            >
                   <span className="form-item__select-custom__icon"></span>
               </span>
 
